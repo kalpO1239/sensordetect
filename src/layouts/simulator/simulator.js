@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Label } from "@mui/icons-material";
+// Material Dashboard 2 React components
+import MDBox from "components/MDBox";
+import { Grid } from "@mui/material";
 
 export default function SimulatorComponent() {
   const [selectedOptions, setSelectedOptions] = useState({
@@ -179,180 +182,190 @@ export default function SimulatorComponent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Fire Alarm System Dashboard</h1>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Simulator Panel */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-700">Simulator</h2>
-          <div className="space-y-3 mb-6">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="n5Sensor"
-                name="n5Sensor"
-                checked={selectedOptions.n5Sensor}
-                onChange={handleCheckboxChange}
-                className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-              />
-              <label htmlFor="n5Sensor" className="ml-2 text-gray-700">
-                Fire Alarm from N5 Sensor
-              </label>
-            </div>
-
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="warning"
-                name="warning"
-                checked={selectedOptions.warning}
-                onChange={handleCheckboxChange}
-                className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-              />
-              <label htmlFor="warning" className="ml-2 text-gray-700">
-                Warning
-              </label>
-            </div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="maintenance"
-                name="maintenance"
-                checked={selectedOptions.maintenance}
-                onChange={handleCheckboxChange}
-                className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-              />
-              <label htmlFor="maintenance" className="ml-2 text-gray-700">
-                Under Maintenance
-              </label>
-            </div>
-
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="cameraDetection"
-                name="cameraDetection"
-                checked={selectedOptions.cameraDetection}
-                onChange={handleCheckboxChange}
-                className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-              />
-              <label htmlFor="cameraDetection" className="ml-2 text-gray-700">
-                Camera detected Fire Incident
-              </label>
-            </div>
-
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="phoneCall"
-                name="phoneCall"
-                checked={selectedOptions.phoneCall}
-                onChange={handleCheckboxChange}
-                className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-              />
-              <label htmlFor="phoneCall" className="ml-2 text-gray-700">
-                Phone call received with Fire Incident
-              </label>
-            </div>
-          </div>
-
-          <div className="flex space-x-3">
-            <button
-              onClick={resetSimulator}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
-            >
-              Reset
-            </button>
-
-            <button
-              onClick={saveToDynamoDB}
-              disabled={!dashboardData || isLoading}
-              className={`px-4 py-2 rounded transition-colors ${
-                !dashboardData || isLoading
-                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                  : "bg-blue-600 text-white hover:bg-blue-700"
-              }`}
-            >
-              {isLoading ? "Saving..." : "Save to DynamoDB"}
-            </button>
-          </div>
-
-          {saveStatus.message && (
-            <div
-              className={`mt-4 p-3 rounded ${
-                saveStatus.status === "success"
-                  ? "bg-green-100 text-green-800"
-                  : saveStatus.status === "error"
-                  ? "bg-red-100 text-red-800"
-                  : "bg-blue-100 text-blue-800"
-              }`}
-            >
-              {saveStatus.message}
-            </div>
-          )}
-        </div>
-        <br></br>
-        <br></br>
-
-        {/* Dashboard Display */}
-        <div className="bg-white rounded-lg shadow p-6 lg:col-span-2">
-          <h2 className="text-xl font-semibold mb-4 text-gray-700">Dashboard</h2>
-
-          {dashboardData ? (
+    <MDBox>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6} lg={8}>
+          <div>
+            {/* Simulator Panel */}
             <div>
-              <div className="flex justify-between mb-4">
-                <span
-                  className={`px-3 py-1 rounded-full text-sm font-medium ${getSeverityClass(
-                    dashboardData.severity
-                  )}`}
+              <MDBox display="flex" alignItems="center">
+                Simulator
+              </MDBox>
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="n5Sensor"
+                    name="n5Sensor"
+                    checked={selectedOptions.n5Sensor}
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                  />
+                  <label htmlFor="n5Sensor" className="ml-2 text-gray-700">
+                    Fire Alarm from N5 Sensor
+                  </label>
+                </div>
+
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="warning"
+                    name="warning"
+                    checked={selectedOptions.warning}
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                  />
+                  <label htmlFor="warning" className="ml-2 text-gray-700">
+                    Warning
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="maintenance"
+                    name="maintenance"
+                    checked={selectedOptions.maintenance}
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                  />
+                  <label htmlFor="maintenance" className="ml-2 text-gray-700">
+                    Under Maintenance
+                  </label>
+                </div>
+
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="cameraDetection"
+                    name="cameraDetection"
+                    checked={selectedOptions.cameraDetection}
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                  />
+                  <label htmlFor="cameraDetection" className="ml-2 text-gray-700">
+                    Camera detected Fire Incident
+                  </label>
+                </div>
+
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="phoneCall"
+                    name="phoneCall"
+                    checked={selectedOptions.phoneCall}
+                    onChange={handleCheckboxChange}
+                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                  />
+                  <label htmlFor="phoneCall" className="ml-2 text-gray-700">
+                    Phone call received with Fire Incident
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex space-x-3">
+                <button
+                  onClick={resetSimulator}
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
                 >
-                  {dashboardData.severity}
-                </span>
-                <span className="text-gray-500 text-sm">
-                  {new Date(dashboardData.timestamp).toLocaleString()}
-                </span>
+                  Reset
+                </button>
+
+                <button
+                  onClick={saveToDynamoDB}
+                  disabled={!dashboardData || isLoading}
+                  className={`px-4 py-2 rounded transition-colors ${
+                    !dashboardData || isLoading
+                      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                      : "bg-blue-600 text-white hover:bg-blue-700"
+                  }`}
+                >
+                  {isLoading ? "Saving..." : "Save to DynamoDB"}
+                </button>
               </div>
 
-              <div className="border border-gray-200 rounded-lg p-4 mb-4 bg-gray-50">
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-lg font-medium text-gray-800">{dashboardData.eventType}</h3>
-                  <span className="text-xs font-mono text-gray-500">{dashboardData.eventId}</span>
+              {saveStatus.message && (
+                <div
+                  className={`mt-4 p-3 rounded ${
+                    saveStatus.status === "success"
+                      ? "bg-green-100 text-green-800"
+                      : saveStatus.status === "error"
+                      ? "bg-red-100 text-red-800"
+                      : "bg-blue-100 text-blue-800"
+                  }`}
+                >
+                  {saveStatus.message}
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <p className="text-sm text-gray-500">Source</p>
-                    <p className="font-medium">{dashboardData.source}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">Location</p>
-                    <p className="font-medium">{dashboardData.location}</p>
-                  </div>
-                </div>
-                <div className="mb-4">
-                  <p className="text-sm text-gray-500">Details</p>
-                  <p className="font-medium">{dashboardData.details}</p>
-                </div>
+              )}
+            </div>
+            <br></br>
+            <br></br>
+
+            {/* Dashboard Display */}
+            <div className="bg-white rounded-lg shadow p-6 lg:col-span-2">
+              <h2 className="text-xl font-semibold mb-4 text-gray-700">Dashboard</h2>
+
+              {dashboardData ? (
                 <div>
-                  <p className="text-sm text-gray-500">Action Required</p>
-                  <p className="font-medium">{dashboardData.actionRequired}</p>
-                </div>
-              </div>
+                  <div className="flex justify-between mb-4">
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm font-medium ${getSeverityClass(
+                        dashboardData.severity
+                      )}`}
+                    >
+                      {dashboardData.severity}
+                    </span>
+                    <span className="text-gray-500 text-sm">
+                      {new Date(dashboardData.timestamp).toLocaleString()}
+                    </span>
+                  </div>
 
-              <div className="bg-gray-100 p-4 rounded-lg overflow-auto">
-                <h3 className="text-sm font-mono mb-2 text-gray-700">JSON Output:</h3>
-                <pre className="text-xs font-mono">{JSON.stringify(dashboardData, null, 2)}</pre>
-              </div>
+                  <div className="border border-gray-200 rounded-lg p-4 mb-4 bg-gray-50">
+                    <div className="flex justify-between items-center mb-2">
+                      <h3 className="text-lg font-medium text-gray-800">
+                        {dashboardData.eventType}
+                      </h3>
+                      <span className="text-xs font-mono text-gray-500">
+                        {dashboardData.eventId}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <p className="text-sm text-gray-500">Source</p>
+                        <p className="font-medium">{dashboardData.source}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">Location</p>
+                        <p className="font-medium">{dashboardData.location}</p>
+                      </div>
+                    </div>
+                    <div className="mb-4">
+                      <p className="text-sm text-gray-500">Details</p>
+                      <p className="font-medium">{dashboardData.details}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">Action Required</p>
+                      <p className="font-medium">{dashboardData.actionRequired}</p>
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-100 p-4 rounded-lg overflow-auto">
+                    <h3 className="text-sm font-mono mb-2 text-gray-700">JSON Output:</h3>
+                    <pre className="text-xs font-mono">
+                      {JSON.stringify(dashboardData, null, 2)}
+                    </pre>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-64 text-gray-400">
+                  <p>Select an option from the simulator to view data</p>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center h-64 text-gray-400">
-              <p>Select an option from the simulator to view data</p>
-            </div>
-          )}
-        </div>
-      </div>
-      <br></br>
-      <br></br>
-    </div>
+          </div>
+          <br></br>
+          <br></br>
+        </Grid>
+      </Grid>
+    </MDBox>
   );
 }

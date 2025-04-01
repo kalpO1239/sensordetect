@@ -50,6 +50,7 @@ import Icon from "@mui/material/Icon";
 import Simulator from "layouts/simulator";
 import Incidents from "layouts/tables";
 import SeeThroughIt from "layouts/see";
+import Sense from "layouts/sense";
 
 const routes = [
   {
@@ -75,6 +76,15 @@ const routes = [
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/billing",
     component: <Billing />,
+  },
+
+  {
+    type: "collapse",
+    name: "Sense",
+    key: "sense",
+    icon: <Icon fontSize="small">Sense</Icon>,
+    route: "/sense",
+    component: <Sense />,
   },
 
   {
