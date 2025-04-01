@@ -22,17 +22,26 @@ import MDAvatar from "components/MDAvatar";
 import MDBadge from "components/MDBadge";
 
 // Images
-import team2 from "assets/images/team-2.jpg";
-import team3 from "assets/images/team-3.jpg";
-import team4 from "assets/images/team-4.jpg";
 import cameraimage from "assets/images/camera-image.png";
 
 export default function data() {
-  const Author = ({ image, name, email }) => (
+  const CameraData = ({ image, name, email }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDAvatar src={image} name={name} size="sm" />
       <MDBox ml={2} lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">
+          {name}
+        </MDTypography>
+        <MDTypography variant="caption">{email}</MDTypography>
+      </MDBox>
+    </MDBox>
+  );
+
+  const CameraDataHref = ({ image, name, email, hrefUrl }) => (
+    <MDBox display="flex" alignItems="center" lineHeight={1}>
+      <MDAvatar src={image} name={name} size="sm" />
+      <MDBox ml={2} lineHeight={1}>
+        <MDTypography display="block" variant="button" fontWeight="medium" href={hrefUrl}>
           {name}
         </MDTypography>
         <MDTypography variant="caption">{email}</MDTypography>
@@ -51,35 +60,50 @@ export default function data() {
 
   return {
     columns: [
-      { Header: "author", accessor: "author", width: "45%", align: "left" },
-      { Header: "function", accessor: "function", align: "left" },
-      { Header: "status", accessor: "status", align: "center" },
-      { Header: "employed", accessor: "employed", align: "center" },
-      { Header: "action", accessor: "action", align: "center" },
+      { Header: "Camera", accessor: "camera", align: "left" },
+      { Header: "Location", accessor: "location", align: "left" },
+      { Header: "Status", accessor: "status", align: "center" },
+      { Header: "Camera-Id", accessor: "cameraId", align: "center" },
+      { Header: "Description", accessor: "description", align: "left" },
     ],
 
     rows: [
       {
-        author: <Author image={cameraimage} name="John Michael" email="john@creative-tim.com" />,
-        function: <Job title="Manager" description="Organization" />,
+        camera: (
+          <CameraDataHref
+            image={cameraimage}
+            name="Ashley Municipal Airport 1"
+            email=""
+            hrefUrl="https://alertwest.live/cam-console/14190"
+          />
+        ),
+        location: <Job title="Ashley Municipal Airport" description="" />,
         status: (
           <MDBox ml={-1}>
             <MDBadge badgeContent="online" color="success" variant="gradient" size="sm" />
           </MDBox>
         ),
-        employed: (
-          <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            23/04/18
+        cameraId: (
+          <MDTypography
+            component="a"
+            href="https://alertwest.live/cam-console/14190"
+            variant="caption"
+            color="text"
+            fontWeight="medium"
+          >
+            14190
           </MDTypography>
         ),
-        action: (
+        description: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            Edit
+            This camera is owned by Federal Aviation Authority
           </MDTypography>
         ),
       },
       {
-        author: <Author image={team3} name="Alexa Liras" email="alexa@creative-tim.com" />,
+        author: (
+          <CameraData image={cameraimage} name="Alexa Liras" email="alexa@creative-tim.com" />
+        ),
         function: <Job title="Programator" description="Developer" />,
         status: (
           <MDBox ml={-1}>
@@ -98,7 +122,9 @@ export default function data() {
         ),
       },
       {
-        author: <Author image={team4} name="Laurent Perrier" email="laurent@creative-tim.com" />,
+        author: (
+          <CameraData image={cameraimage} name="Laurent Perrier" email="laurent@creative-tim.com" />
+        ),
         function: <Job title="Executive" description="Projects" />,
         status: (
           <MDBox ml={-1}>
@@ -117,7 +143,9 @@ export default function data() {
         ),
       },
       {
-        author: <Author image={team3} name="Michael Levi" email="michael@creative-tim.com" />,
+        author: (
+          <CameraData image={cameraimage} name="Michael Levi" email="michael@creative-tim.com" />
+        ),
         function: <Job title="Programator" description="Developer" />,
         status: (
           <MDBox ml={-1}>
@@ -136,7 +164,9 @@ export default function data() {
         ),
       },
       {
-        author: <Author image={team3} name="Richard Gran" email="richard@creative-tim.com" />,
+        author: (
+          <CameraData image={cameraimage} name="Richard Gran" email="richard@creative-tim.com" />
+        ),
         function: <Job title="Manager" description="Executive" />,
         status: (
           <MDBox ml={-1}>
@@ -155,7 +185,9 @@ export default function data() {
         ),
       },
       {
-        author: <Author image={team4} name="Miriam Eric" email="miriam@creative-tim.com" />,
+        author: (
+          <CameraData image={cameraimage} name="Miriam Eric" email="miriam@creative-tim.com" />
+        ),
         function: <Job title="Programator" description="Developer" />,
         status: (
           <MDBox ml={-1}>

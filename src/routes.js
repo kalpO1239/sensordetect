@@ -47,6 +47,9 @@ import SignUp from "layouts/authentication/sign-up";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import Simulator from "layouts/simulator";
+import Incidents from "layouts/tables";
+import SeeThroughIt from "layouts/see";
 
 const routes = [
   {
@@ -59,11 +62,11 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Tables",
-    key: "tables",
+    name: "Incidents",
+    key: "incidents",
     icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tables",
-    component: <Tables />,
+    route: "/incidents",
+    component: <Incidents />,
   },
   {
     type: "collapse",
@@ -73,14 +76,25 @@ const routes = [
     route: "/billing",
     component: <Billing />,
   },
+
   {
     type: "collapse",
-    name: "RTL",
-    key: "rtl",
-    icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
-    route: "/rtl",
-    component: <RTL />,
+    name: "See Through It",
+    key: "seethroughtit",
+    icon: <Icon fontSize="small">SeeThroughIt</Icon>,
+    route: "/seethroughit",
+    component: <SeeThroughIt />,
   },
+
+  {
+    type: "collapse",
+    name: "Simulator",
+    key: "simulator",
+    icon: <Icon fontSize="small">Simulator</Icon>,
+    route: "/simulator",
+    component: <Simulator />,
+  },
+
   {
     type: "collapse",
     name: "Notifications",
@@ -91,7 +105,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Profile",
+    name: "Social Media",
     key: "profile",
     icon: <Icon fontSize="small">person</Icon>,
     route: "/profile",

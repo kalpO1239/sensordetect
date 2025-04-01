@@ -48,12 +48,12 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="dark"
                 icon="weekend"
-                title="Bookings"
-                count={281}
+                title="Total Active Sensors"
+                count="281/300"
                 percentage={{
                   color: "success",
-                  amount: "+55%",
-                  label: "than lask week",
+                  amount: "93.66%",
+                  label: "Active",
                 }}
               />
             </MDBox>
@@ -62,12 +62,12 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="leaderboard"
-                title="Today's Users"
-                count="2,300"
+                title="Total Active Cameras"
+                count="225/240"
                 percentage={{
                   color: "success",
-                  amount: "+3%",
-                  label: "than last month",
+                  amount: "93.75%",
+                  label: "Active",
                 }}
               />
             </MDBox>
@@ -77,12 +77,12 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="success"
                 icon="store"
-                title="Revenue"
-                count="34k"
+                title="Total Incidents"
+                count="40"
                 percentage={{
                   color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
+                  amount: "2%",
+                  label: "Active",
                 }}
               />
             </MDBox>
@@ -92,12 +92,12 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="primary"
                 icon="person_add"
-                title="Followers"
-                count="+91"
+                title="Resolved"
+                count="32"
                 percentage={{
                   color: "success",
-                  amount: "",
-                  label: "Just updated",
+                  amount: "98%",
+                  label: "Resolved",
                 }}
               />
             </MDBox>
@@ -109,9 +109,9 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsBarChart
                   color="info"
-                  title="website views"
-                  description="Last Campaign Performance"
-                  date="campaign sent 2 days ago"
+                  title="Incidents in the Week"
+                  description="List of incidents reported per week"
+                  date="Incidents since Last week"
                   chart={reportsBarChartData}
                 />
               </MDBox>
