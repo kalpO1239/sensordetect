@@ -45,24 +45,28 @@ function Incidents() {
     const fetchIncidents = () => {
       try {
         // Get data from localStorage
-        const storedIncidents = JSON.parse(localStorage.getItem("fireIncidents") || "[]");
-        
+        const storedIncidents = JSON.parse(
+          localStorage.getItem("fireIncidents") || "[]",
+        );
+
         if (storedIncidents.length > 0) {
           // Format the data
-          const formattedIncidents = storedIncidents.map(incident => ({
+          const formattedIncidents = storedIncidents.map((incident) => ({
             id: incident.eventId || incident.id,
             location: incident.location || "Unknown",
             description: incident.details || "No description",
-            priority: 
-              incident.severity === "CRITICAL" || incident.severity === "HIGH" 
-                ? "High" 
-                : incident.severity === "MEDIUM" 
-                  ? "Medium" 
-                  : "Low",
+            priority:
+              incident.severity === "CRITICAL" || incident.severity === "HIGH"
+                ? "High"
+                : incident.severity === "MEDIUM"
+                ? "Medium"
+                : "Low",
             status: "New",
-            date: new Date(incident.createdAt || incident.timestamp || Date.now())
+            date: new Date(
+              incident.createdAt || incident.timestamp || Date.now(),
+            ),
           }));
-          
+
           setIncidents(formattedIncidents);
           setFilteredIncidents(formattedIncidents);
         } else {

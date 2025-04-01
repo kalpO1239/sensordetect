@@ -24,7 +24,7 @@ export function IncidentProvider({ children }) {
         console.log("Incident already exists, not adding duplicate");
         return prevIncidents;
       }
-      
+
       // Add new incident at the beginning of the array
       console.log("Adding new incident to context");
       return [incident, ...prevIncidents];

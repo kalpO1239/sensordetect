@@ -199,7 +199,8 @@ function Sensors() {
                       Live Camera Feed from AlertWest.live
                     </MDTypography>
                     <MDTypography variant="body2" color="text">
-                      This camera provides real-time monitoring for fire detection and response.
+                      This camera provides real-time monitoring for fire
+                      detection and response.
                     </MDTypography>
                   </MDBox>
 
@@ -210,11 +211,11 @@ function Sensors() {
                           <MDTypography variant="h6" gutterBottom>
                             AlertWest Live Monitoring
                           </MDTypography>
-                          <iframe 
-                            src="https://alertwest.live" 
-                            width="100%" 
-                            height="700" 
-                            frameBorder="0" 
+                          <iframe
+                            src="https://alertwest.live"
+                            width="100%"
+                            height="700"
+                            frameBorder="0"
                             title="AlertWest Live Camera Feed"
                             allowFullScreen
                           />

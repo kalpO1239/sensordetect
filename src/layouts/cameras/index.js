@@ -186,23 +186,28 @@ function Cameras() {
                       AlertWest.live Monitoring System
                     </MDTypography>
                     <MDTypography variant="body2" color="text">
-                      Comprehensive fire detection camera system with real-time monitoring capabilities.
+                      Comprehensive fire detection camera system with real-time
+                      monitoring capabilities.
                     </MDTypography>
                   </MDBox>
-                  
+
                   <Card>
                     <MDBox p={2}>
-                      <MDBox 
-                        display="flex" 
-                        justifyContent="space-between" 
-                        alignItems="center" 
+                      <MDBox
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
                         mb={2}
                         bgcolor="error.light"
                         p={2}
                         borderRadius="lg"
                       >
                         <MDBox>
-                          <MDTypography variant="h6" fontWeight="medium" color="error.dark">
+                          <MDTypography
+                            variant="h6"
+                            fontWeight="medium"
+                            color="error.dark"
+                          >
                             AlertWest Live Feed
                           </MDTypography>
                           <MDTypography variant="caption" color="text">
@@ -222,33 +227,25 @@ function Cameras() {
                           </MDTypography>
                         </MDBox>
                       </MDBox>
-                      
-                      <iframe 
-                        src="https://alertwest.live" 
-                        width="100%" 
-                        height="700" 
-                        frameBorder="0" 
+
+                      <iframe
+                        src="https://alertwest.live"
+                        width="100%"
+                        height="700"
+                        frameBorder="0"
                         title="AlertWest Live Camera Feed"
                         allowFullScreen
                       />
-                      
+
                       <MDBox
                         display="flex"
                         justifyContent="space-between"
                         mt={2}
                       >
-                        <MDButton
-                          variant="outlined"
-                          color="error"
-                          size="small"
-                        >
+                        <MDButton variant="outlined" color="error" size="small">
                           <Icon>fullscreen</Icon>&nbsp;Expand
                         </MDButton>
-                        <MDButton
-                          variant="outlined"
-                          color="dark"
-                          size="small"
-                        >
+                        <MDButton variant="outlined" color="dark" size="small">
                           <Icon>settings</Icon>&nbsp;Settings
                         </MDButton>
                       </MDBox>

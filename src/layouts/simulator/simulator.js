@@ -166,8 +166,10 @@ export default function SimulatorComponent() {
 
     try {
       // Get existing data
-      const existingData = JSON.parse(localStorage.getItem("fireIncidents") || "[]");
-      
+      const existingData = JSON.parse(
+        localStorage.getItem("fireIncidents") || "[]",
+      );
+
       // Add new data with timestamp
       const dataToSave = {
         id: `incident-${Date.now()}`,
@@ -183,23 +185,26 @@ export default function SimulatorComponent() {
           scenario,
           location,
           intensity,
-          spreadRate
+          spreadRate,
         },
-        affectedSensors
+        affectedSensors,
       };
-      
+
       // Save updated data
-      localStorage.setItem("fireIncidents", JSON.stringify([dataToSave, ...existingData]));
-      
+      localStorage.setItem(
+        "fireIncidents",
+        JSON.stringify([dataToSave, ...existingData]),
+      );
+
       setSaveStatus({
         status: "success",
-        message: `Event ${dashboardData.eventId} successfully saved to local storage`
+        message: `Event ${dashboardData.eventId} successfully saved to local storage`,
       });
     } catch (error) {
       console.error("Error saving to local storage:", error);
       setSaveStatus({
         status: "error",
-        message: `Failed to save: ${error.message}`
+        message: `Failed to save: ${error.message}`,
       });
     } finally {
       setIsLoading(false);
@@ -224,71 +229,77 @@ export default function SimulatorComponent() {
 
   const handleStartSimulation = () => {
     setIsSimulationRunning(true);
-    
+
     // Generate mock affected sensors based on the scenario
     const mockSensors = [
       {
         id: "SNS-001",
         type: "Smoke Detector",
         location: location || "Building A",
-        reading: "High smoke concentration"
+        reading: "High smoke concentration",
       },
       {
         id: "SNS-002",
         type: "Heat Sensor",
         location: location || "Building A",
-        reading: "Temperature: 180°F"
+        reading: "Temperature: 180°F",
       },
       {
         id: "SNS-003",
         type: "CO Detector",
         location: location || "Building A",
-        reading: "CO Level: 150 ppm"
-      }
+        reading: "CO Level: 150 ppm",
+      },
     ];
-    
+
     setAffectedSensors(mockSensors);
-    
+
     // Generate mock simulation logs
     const currentTime = new Date();
     const mockLogs = [
       {
-        type: 'info',
+        type: "info",
         timestamp: new Date(currentTime.getTime() - 5000).toLocaleTimeString(),
-        message: `Simulation started: ${scenario || 'Default'} scenario at ${location || 'Building A'}`
+        message: `Simulation started: ${scenario || "Default"} scenario at ${
+          location || "Building A"
+        }`,
       },
       {
-        type: 'alert',
+        type: "alert",
         timestamp: new Date(currentTime.getTime() - 3000).toLocaleTimeString(),
-        message: `Smoke detector SNS-001 triggered at ${location || 'Building A'}`
+        message: `Smoke detector SNS-001 triggered at ${
+          location || "Building A"
+        }`,
       },
       {
-        type: 'alert',
+        type: "alert",
         timestamp: new Date(currentTime.getTime() - 1000).toLocaleTimeString(),
-        message: `Heat sensor SNS-002 reporting dangerous temperature levels`
+        message: `Heat sensor SNS-002 reporting dangerous temperature levels`,
       },
       {
-        type: 'info',
+        type: "info",
         timestamp: currentTime.toLocaleTimeString(),
-        message: `Alerting emergency response teams to ${location || 'Building A'}`
-      }
+        message: `Alerting emergency response teams to ${
+          location || "Building A"
+        }`,
+      },
     ];
-    
+
     setSimulationLogs(mockLogs);
   };
 
   const handleStopSimulation = () => {
     setIsSimulationRunning(false);
-    
+
     // Add a stop message to the logs
     const currentTime = new Date().toLocaleTimeString();
     setSimulationLogs([
       ...simulationLogs,
       {
-        type: 'info',
+        type: "info",
         timestamp: currentTime,
-        message: 'Simulation stopped by user'
-      }
+        message: "Simulation stopped by user",
+      },
     ]);
   };
 
@@ -310,54 +321,79 @@ export default function SimulatorComponent() {
         <MDTypography variant="h6" color="white">
           Fire Detection Simulator
         </MDTypography>
-        <MDButton variant="gradient" color="dark" size="small" onClick={resetSimulator}>
+        <MDButton
+          variant="gradient"
+          color="dark"
+          size="small"
+          onClick={resetSimulator}
+        >
           <Icon>refresh</Icon>&nbsp;Reset
         </MDButton>
       </MDBox>
       <MDBox p={3}>
-      <Grid container spacing={3}>
+        <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
-            <Card sx={{ height: '100%', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+            <Card
+              sx={{ height: "100%", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}
+            >
               <MDBox p={2}>
                 <MDTypography variant="h6" gutterBottom color="error">
                   Simulation Controls
                 </MDTypography>
-                <Divider sx={{ mb: 2, borderColor: 'rgba(0,0,0,0.1)' }} />
+                <Divider sx={{ mb: 2, borderColor: "rgba(0,0,0,0.1)" }} />
                 <MDBox mb={2}>
-                  <MDTypography variant="button" fontWeight="regular" color="text">
+                  <MDTypography
+                    variant="button"
+                    fontWeight="regular"
+                    color="text"
+                  >
                     Select a scenario to simulate fire detection events
                   </MDTypography>
-              </MDBox>
+                </MDBox>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <FormControl fullWidth>
-                      <InputLabel id="scenario-select-label">Scenario</InputLabel>
+                      <InputLabel id="scenario-select-label">
+                        Scenario
+                      </InputLabel>
                       <Select
                         labelId="scenario-select-label"
                         id="scenario-select"
                         value={scenario}
                         label="Scenario"
                         onChange={handleScenarioChange}
-                        sx={{ '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0,0,0,0.2)' } }}
+                        sx={{
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "rgba(0,0,0,0.2)",
+                          },
+                        }}
                       >
                         <MenuItem value="kitchen">Kitchen Fire</MenuItem>
                         <MenuItem value="electrical">Electrical Fire</MenuItem>
                         <MenuItem value="chemical">Chemical Fire</MenuItem>
-                        <MenuItem value="wildfire">Wildfire Approaching</MenuItem>
+                        <MenuItem value="wildfire">
+                          Wildfire Approaching
+                        </MenuItem>
                         <MenuItem value="custom">Custom Scenario</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>
                     <FormControl fullWidth>
-                      <InputLabel id="location-select-label">Location</InputLabel>
+                      <InputLabel id="location-select-label">
+                        Location
+                      </InputLabel>
                       <Select
                         labelId="location-select-label"
                         id="location-select"
                         value={location}
                         label="Location"
                         onChange={handleLocationChange}
-                        sx={{ '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0,0,0,0.2)' } }}
+                        sx={{
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "rgba(0,0,0,0.2)",
+                          },
+                        }}
                       >
                         <MenuItem value="building-a">Building A</MenuItem>
                         <MenuItem value="building-b">Building B</MenuItem>
@@ -369,14 +405,20 @@ export default function SimulatorComponent() {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <FormControl fullWidth>
-                      <InputLabel id="intensity-select-label">Fire Intensity</InputLabel>
+                      <InputLabel id="intensity-select-label">
+                        Fire Intensity
+                      </InputLabel>
                       <Select
                         labelId="intensity-select-label"
                         id="intensity-select"
                         value={intensity}
                         label="Fire Intensity"
                         onChange={handleIntensityChange}
-                        sx={{ '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0,0,0,0.2)' } }}
+                        sx={{
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "rgba(0,0,0,0.2)",
+                          },
+                        }}
                       >
                         <MenuItem value="low">Low</MenuItem>
                         <MenuItem value="medium">Medium</MenuItem>
@@ -387,14 +429,20 @@ export default function SimulatorComponent() {
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <FormControl fullWidth>
-                      <InputLabel id="spread-select-label">Spread Rate</InputLabel>
+                      <InputLabel id="spread-select-label">
+                        Spread Rate
+                      </InputLabel>
                       <Select
                         labelId="spread-select-label"
                         id="spread-select"
                         value={spreadRate}
                         label="Spread Rate"
                         onChange={handleSpreadRateChange}
-                        sx={{ '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0,0,0,0.2)' } }}
+                        sx={{
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "rgba(0,0,0,0.2)",
+                          },
+                        }}
                       >
                         <MenuItem value="slow">Slow</MenuItem>
                         <MenuItem value="moderate">Moderate</MenuItem>
@@ -404,9 +452,15 @@ export default function SimulatorComponent() {
                     </FormControl>
                   </Grid>
                 </Grid>
-                
+
                 <MDBox mt={3}>
-                  <MDTypography variant="button" fontWeight="medium" color="text" mb={1} display="block">
+                  <MDTypography
+                    variant="button"
+                    fontWeight="medium"
+                    color="text"
+                    mb={1}
+                    display="block"
+                  >
                     Event Types:
                   </MDTypography>
                   <Grid container spacing={1}>
@@ -414,10 +468,13 @@ export default function SimulatorComponent() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                    checked={selectedOptions.n5Sensor}
-                    onChange={handleCheckboxChange}
+                            checked={selectedOptions.n5Sensor}
+                            onChange={handleCheckboxChange}
                             name="n5Sensor"
-                            sx={{ color: 'error.main', '&.Mui-checked': { color: 'error.main' } }}
+                            sx={{
+                              color: "error.main",
+                              "&.Mui-checked": { color: "error.main" },
+                            }}
                           />
                         }
                         label="N5 Sensor Alert"
@@ -427,10 +484,13 @@ export default function SimulatorComponent() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                    checked={selectedOptions.warning}
-                    onChange={handleCheckboxChange}
+                            checked={selectedOptions.warning}
+                            onChange={handleCheckboxChange}
                             name="warning"
-                            sx={{ color: 'warning.main', '&.Mui-checked': { color: 'warning.main' } }}
+                            sx={{
+                              color: "warning.main",
+                              "&.Mui-checked": { color: "warning.main" },
+                            }}
                           />
                         }
                         label="Warning Event"
@@ -440,10 +500,13 @@ export default function SimulatorComponent() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                    checked={selectedOptions.cameraDetection}
-                    onChange={handleCheckboxChange}
+                            checked={selectedOptions.cameraDetection}
+                            onChange={handleCheckboxChange}
                             name="cameraDetection"
-                            sx={{ color: 'error.main', '&.Mui-checked': { color: 'error.main' } }}
+                            sx={{
+                              color: "error.main",
+                              "&.Mui-checked": { color: "error.main" },
+                            }}
                           />
                         }
                         label="Camera Detection"
@@ -453,10 +516,13 @@ export default function SimulatorComponent() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                    checked={selectedOptions.phoneCall}
-                    onChange={handleCheckboxChange}
+                            checked={selectedOptions.phoneCall}
+                            onChange={handleCheckboxChange}
                             name="phoneCall"
-                            sx={{ color: 'error.main', '&.Mui-checked': { color: 'error.main' } }}
+                            sx={{
+                              color: "error.main",
+                              "&.Mui-checked": { color: "error.main" },
+                            }}
                           />
                         }
                         label="Phone Call Report"
@@ -464,77 +530,95 @@ export default function SimulatorComponent() {
                     </Grid>
                   </Grid>
                 </MDBox>
-                
-                <Divider sx={{ my: 2, borderColor: 'rgba(0,0,0,0.1)' }} />
-                
+
+                <Divider sx={{ my: 2, borderColor: "rgba(0,0,0,0.1)" }} />
+
                 <MDBox display="flex" justifyContent="space-between">
-                  <MDButton 
-                    variant="gradient" 
-                    color="error" 
+                  <MDButton
+                    variant="gradient"
+                    color="error"
                     onClick={handleStartSimulation}
                     disabled={isSimulationRunning}
                   >
-                    <Icon>play_arrow</Icon>&nbsp;
-                    Start Simulation
+                    <Icon>play_arrow</Icon>&nbsp; Start Simulation
                   </MDButton>
-                  <MDButton 
-                    variant="outlined" 
-                    color="dark" 
+                  <MDButton
+                    variant="outlined"
+                    color="dark"
                     onClick={handleStopSimulation}
                     disabled={!isSimulationRunning}
                   >
-                    <Icon>stop</Icon>&nbsp;
-                    Stop Simulation
+                    <Icon>stop</Icon>&nbsp; Stop Simulation
                   </MDButton>
                 </MDBox>
               </MDBox>
             </Card>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Card sx={{ height: '100%', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+            <Card
+              sx={{ height: "100%", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}
+            >
               <MDBox p={2}>
                 <MDTypography variant="h6" gutterBottom color="error">
                   Simulation Status
                 </MDTypography>
-                <Divider sx={{ mb: 2, borderColor: 'rgba(0,0,0,0.1)' }} />
-                <MDBox 
-                  bgcolor={isSimulationRunning ? "error.light" : "background.paper"}
+                <Divider sx={{ mb: 2, borderColor: "rgba(0,0,0,0.1)" }} />
+                <MDBox
+                  bgcolor={
+                    isSimulationRunning ? "error.light" : "background.paper"
+                  }
                   p={2}
                   borderRadius="lg"
                   mb={2}
-                  sx={{ 
-                    transition: 'background-color 0.3s ease',
-                    border: '1px solid',
-                    borderColor: isSimulationRunning ? 'error.main' : 'divider'
+                  sx={{
+                    transition: "background-color 0.3s ease",
+                    border: "1px solid",
+                    borderColor: isSimulationRunning ? "error.main" : "divider",
                   }}
                 >
-                  <MDTypography variant="button" fontWeight="bold" color={isSimulationRunning ? "error" : "text"}>
+                  <MDTypography
+                    variant="button"
+                    fontWeight="bold"
+                    color={isSimulationRunning ? "error" : "text"}
+                  >
                     Status: {isSimulationRunning ? "SIMULATION ACTIVE" : "Idle"}
                   </MDTypography>
                   {isSimulationRunning && (
                     <MDBox mt={1}>
                       <MDTypography variant="caption" color="text">
-                        Simulating {scenario || 'default'} scenario at {location || 'default location'} with {intensity || 'medium'} intensity
+                        Simulating {scenario || "default"} scenario at{" "}
+                        {location || "default location"} with{" "}
+                        {intensity || "medium"} intensity
                       </MDTypography>
                     </MDBox>
                   )}
                 </MDBox>
-                
+
                 {dashboardData && (
-                  <MDBox 
-                    bgcolor="grey.100" 
-                    p={2} 
-                    borderRadius="lg" 
+                  <MDBox
+                    bgcolor="grey.100"
+                    p={2}
+                    borderRadius="lg"
                     mb={2}
                     border="1px solid"
                     borderColor="divider"
                   >
-                    <MDTypography variant="button" fontWeight="bold" color="text" mb={1} display="block">
+                    <MDTypography
+                      variant="button"
+                      fontWeight="bold"
+                      color="text"
+                      mb={1}
+                      display="block"
+                    >
                       Event Data:
                     </MDTypography>
                     <Grid container spacing={1}>
                       <Grid item xs={4}>
-                        <MDTypography variant="caption" color="text" fontWeight="medium">
+                        <MDTypography
+                          variant="caption"
+                          color="text"
+                          fontWeight="medium"
+                        >
                           ID:
                         </MDTypography>
                       </Grid>
@@ -544,7 +628,11 @@ export default function SimulatorComponent() {
                         </MDTypography>
                       </Grid>
                       <Grid item xs={4}>
-                        <MDTypography variant="caption" color="text" fontWeight="medium">
+                        <MDTypography
+                          variant="caption"
+                          color="text"
+                          fontWeight="medium"
+                        >
                           Type:
                         </MDTypography>
                       </Grid>
@@ -554,20 +642,28 @@ export default function SimulatorComponent() {
                         </MDTypography>
                       </Grid>
                       <Grid item xs={4}>
-                        <MDTypography variant="caption" color="text" fontWeight="medium">
+                        <MDTypography
+                          variant="caption"
+                          color="text"
+                          fontWeight="medium"
+                        >
                           Severity:
                         </MDTypography>
                       </Grid>
                       <Grid item xs={8}>
-                        <MDBox 
-                          component="span" 
-                          px={1} 
-                          py={0.5} 
-                          borderRadius="sm" 
+                        <MDBox
+                          component="span"
+                          px={1}
+                          py={0.5}
+                          borderRadius="sm"
                           bgcolor={
-                            dashboardData.severity === "CRITICAL" ? "error.main" :
-                            dashboardData.severity === "HIGH" ? "error.light" :
-                            dashboardData.severity === "MEDIUM" ? "warning.main" : "info.main"
+                            dashboardData.severity === "CRITICAL"
+                              ? "error.main"
+                              : dashboardData.severity === "HIGH"
+                              ? "error.light"
+                              : dashboardData.severity === "MEDIUM"
+                              ? "warning.main"
+                              : "info.main"
                           }
                           color="white"
                           fontSize="0.65rem"
@@ -577,10 +673,10 @@ export default function SimulatorComponent() {
                         </MDBox>
                       </Grid>
                     </Grid>
-                    <MDButton 
-                      variant="text" 
-                      color="info" 
-                      size="small" 
+                    <MDButton
+                      variant="text"
+                      color="info"
+                      size="small"
                       onClick={saveToDatabase}
                       disabled={isLoading}
                       sx={{ mt: 1 }}
@@ -589,9 +685,11 @@ export default function SimulatorComponent() {
                       {isLoading ? "Saving..." : "Save to Local Storage"}
                     </MDButton>
                     {saveStatus.message && (
-                      <MDTypography 
-                        variant="caption" 
-                        color={saveStatus.status === "success" ? "success" : "error"}
+                      <MDTypography
+                        variant="caption"
+                        color={
+                          saveStatus.status === "success" ? "success" : "error"
+                        }
                         mt={1}
                         display="block"
                       >
@@ -600,25 +698,33 @@ export default function SimulatorComponent() {
                     )}
                   </MDBox>
                 )}
-                
+
                 <MDBox>
-                  <MDTypography variant="button" fontWeight="medium" color="text" mb={1} display="block">
+                  <MDTypography
+                    variant="button"
+                    fontWeight="medium"
+                    color="text"
+                    mb={1}
+                    display="block"
+                  >
                     Affected Sensors:
                   </MDTypography>
-                  <List 
-                    sx={{ 
-                      bgcolor: 'background.paper', 
-                      border: '1px solid', 
-                      borderColor: 'divider',
+                  <List
+                    sx={{
+                      bgcolor: "background.paper",
+                      border: "1px solid",
+                      borderColor: "divider",
                       borderRadius: 1,
-                      maxHeight: '200px',
-                      overflow: 'auto'
+                      maxHeight: "200px",
+                      overflow: "auto",
                     }}
                   >
                     {affectedSensors.map((sensor) => (
                       <ListItem key={sensor.id} sx={{ py: 0.5 }}>
                         <ListItemIcon sx={{ minWidth: 36 }}>
-                          <Icon color="error" fontSize="small">warning</Icon>
+                          <Icon color="error" fontSize="small">
+                            warning
+                          </Icon>
                         </ListItemIcon>
                         <ListItemText
                           primary={
@@ -628,7 +734,8 @@ export default function SimulatorComponent() {
                           }
                           secondary={
                             <MDTypography variant="caption" color="text">
-                              Location: {sensor.location} | Reading: {sensor.reading}
+                              Location: {sensor.location} | Reading:{" "}
+                              {sensor.reading}
                             </MDTypography>
                           }
                         />
@@ -656,29 +763,36 @@ export default function SimulatorComponent() {
             </Card>
           </Grid>
           <Grid item xs={12}>
-            <Card sx={{ boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+            <Card sx={{ boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}>
               <MDBox p={2}>
                 <MDTypography variant="h6" gutterBottom color="error">
                   Simulation Log
                 </MDTypography>
-                <Divider sx={{ mb: 2, borderColor: 'rgba(0,0,0,0.1)' }} />
+                <Divider sx={{ mb: 2, borderColor: "rgba(0,0,0,0.1)" }} />
                 <MDBox
                   sx={{
-                    maxHeight: '200px',
-                    overflowY: 'auto',
-                    bgcolor: 'grey.100',
+                    maxHeight: "200px",
+                    overflowY: "auto",
+                    bgcolor: "grey.100",
                     p: 2,
                     borderRadius: 1,
-                    border: '1px solid',
-                    borderColor: 'divider',
+                    border: "1px solid",
+                    borderColor: "divider",
                   }}
                 >
                   {simulationLogs.length > 0 ? (
                     simulationLogs.map((log, index) => (
-                      <MDBox key={index} mb={1} display="flex" alignItems="flex-start">
+                      <MDBox
+                        key={index}
+                        mb={1}
+                        display="flex"
+                        alignItems="flex-start"
+                      >
                         <MDBox
                           component="span"
-                          bgColor={log.type === 'alert' ? 'error.main' : 'info.main'}
+                          bgColor={
+                            log.type === "alert" ? "error.main" : "info.main"
+                          }
                           color="white"
                           px={1}
                           borderRadius="sm"
@@ -697,15 +811,16 @@ export default function SimulatorComponent() {
                     ))
                   ) : (
                     <MDTypography variant="body2" color="text">
-                      No simulation logs available. Start a simulation to see logs.
+                      No simulation logs available. Start a simulation to see
+                      logs.
                     </MDTypography>
                   )}
                 </MDBox>
               </MDBox>
             </Card>
           </Grid>
-      </Grid>
-    </MDBox>
+        </Grid>
+      </MDBox>
     </Card>
   );
 }
