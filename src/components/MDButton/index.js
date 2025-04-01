@@ -41,7 +41,7 @@ const MDButton = forwardRef(
         {children}
       </MDButtonRoot>
     );
-  }
+  },
 );
 
 // Setting default values for the props of MDButton
@@ -72,5 +72,7 @@ MDButton.propTypes = {
   iconOnly: PropTypes.bool,
   children: PropTypes.node.isRequired,
 };
+
+MDButton.displayName = "MDButton";
 
 export default MDButton;

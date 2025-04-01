@@ -39,4 +39,6 @@ MDInput.propTypes = {
   disabled: PropTypes.bool,
 };
 
+MDInput.displayName = "MDInput";
+
 export default MDInput;

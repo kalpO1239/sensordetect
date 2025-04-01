@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Label } from "@mui/icons-material";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import { Grid } from "@mui/material";
@@ -90,7 +89,8 @@ export default function SimulatorComponent() {
             location: "Cafeteria, Ground Floor",
             timestamp,
             details: "Phone call received reporting fire in kitchen area",
-            actionRequired: "Emergency services contacted, evacuation in progress",
+            actionRequired:
+              "Emergency services contacted, evacuation in progress",
           };
           break;
         default:
@@ -147,7 +147,7 @@ export default function SimulatorComponent() {
       // that would handle the DynamoDB operations
 
       // Simulated API call
-      const response = await fetch("/api/save-to-dynamodb", {
+      await fetch("/api/save-to-dynamodb", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -163,7 +163,8 @@ export default function SimulatorComponent() {
       // Simulate successful DB insertion
       setSaveStatus({
         status: "success",
-        message: "Event ${dashboardData.eventId} successfully saved to DynamoDB.",
+        message:
+          "Event ${dashboardData.eventId} successfully saved to DynamoDB.",
       });
 
       // In a real implementation, you would check the response and handle errors
@@ -242,7 +243,10 @@ export default function SimulatorComponent() {
                     onChange={handleCheckboxChange}
                     className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
                   />
-                  <label htmlFor="cameraDetection" className="ml-2 text-gray-700">
+                  <label
+                    htmlFor="cameraDetection"
+                    className="ml-2 text-gray-700"
+                  >
                     Camera detected Fire Incident
                   </label>
                 </div>
@@ -302,14 +306,16 @@ export default function SimulatorComponent() {
 
             {/* Dashboard Display */}
             <div className="bg-white rounded-lg shadow p-6 lg:col-span-2">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Dashboard</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-700">
+                Dashboard
+              </h2>
 
               {dashboardData ? (
                 <div>
                   <div className="flex justify-between mb-4">
                     <span
                       className={`px-3 py-1 rounded-full text-sm font-medium ${getSeverityClass(
-                        dashboardData.severity
+                        dashboardData.severity,
                       )}`}
                     >
                       {dashboardData.severity}
@@ -344,12 +350,16 @@ export default function SimulatorComponent() {
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Action Required</p>
-                      <p className="font-medium">{dashboardData.actionRequired}</p>
+                      <p className="font-medium">
+                        {dashboardData.actionRequired}
+                      </p>
                     </div>
                   </div>
 
                   <div className="bg-gray-100 p-4 rounded-lg overflow-auto">
-                    <h3 className="text-sm font-mono mb-2 text-gray-700">JSON Output:</h3>
+                    <h3 className="text-sm font-mono mb-2 text-gray-700">
+                      JSON Output:
+                    </h3>
                     <pre className="text-xs font-mono">
                       {JSON.stringify(dashboardData, null, 2)}
                     </pre>

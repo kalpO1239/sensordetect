@@ -1,63 +1,28 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-/** 
-  All of the routes for the Material Dashboard 2 React are added here,
-  You can add a new route, customize the routes and delete the routes here.
-
-  Once you add a new route on this file it will be visible automatically on
-  the Sidenav.
-
-  For adding a new route you can follow the existing routes in the routes array.
-  1. The `type` key with the `collapse` value is used for a route.
-  2. The `type` key with the `title` value is used for a title inside the Sidenav. 
-  3. The `type` key with the `divider` value is used for a divider between Sidenav items.
-  4. The `name` key is used for the name of the route on the Sidenav.
-  5. The `key` key is used for the key of the route (It will help you with the key prop inside a loop).
-  6. The `icon` key is used for the icon of the route on the Sidenav, you have to add a node.
-  7. The `collapse` key is used for making a collapsible item on the Sidenav that has other routes
-  inside (nested routes), you need to pass the nested routes inside an array as a value for the `collapse` key.
-  8. The `route` key is used to store the route location which is used for the react router.
-  9. The `href` key is used to store the external links location.
-  10. The `title` key is only for the item with the type of `title` and its used for the title text on the Sidenav.
-  10. The `component` key is used to store the component of its route.
-*/
-
-// Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
-import Tables from "layouts/tables";
-import Billing from "layouts/billing";
-import RTL from "layouts/rtl";
-import Notifications from "layouts/notifications";
-import Profile from "layouts/profile";
-import SignIn from "layouts/authentication/sign-in";
-import SignUp from "layouts/authentication/sign-up";
+import Incidents from "layouts/incidents";
+import Sensors from "layouts/sensors";
+import Trending from "layouts/trending";
+import Cameras from "layouts/cameras";
+import SocialMedia from "layouts/social-media";
+import PhoneCalls from "layouts/phone-calls";
+import TestPage from "layouts/test";
 
-// @mui icons
+// Icons
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import WarningIcon from "@mui/icons-material/Warning";
+import SensorsIcon from "@mui/icons-material/Sensors";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import PublicIcon from "@mui/icons-material/Public";
+import PhoneIcon from "@mui/icons-material/Phone";
 import Icon from "@mui/material/Icon";
-import Simulator from "layouts/simulator";
-import Incidents from "layouts/tables";
-import SeeThroughIt from "layouts/see";
-import Sense from "layouts/sense";
 
 const routes = [
   {
     type: "collapse",
     name: "Dashboard",
     key: "dashboard",
-    icon: <Icon fontSize="small">dashboard</Icon>,
+    icon: <DashboardIcon fontSize="small" />,
     route: "/dashboard",
     component: <Dashboard />,
   },
@@ -65,77 +30,57 @@ const routes = [
     type: "collapse",
     name: "Incidents",
     key: "incidents",
-    icon: <Icon fontSize="small">table_view</Icon>,
+    icon: <WarningIcon fontSize="small" />,
     route: "/incidents",
     component: <Incidents />,
   },
   {
     type: "collapse",
-    name: "Billing",
-    key: "billing",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/billing",
-    component: <Billing />,
+    name: "Sensors",
+    key: "sensors",
+    icon: <SensorsIcon fontSize="small" />,
+    route: "/sensors",
+    component: <Sensors />,
   },
-
   {
     type: "collapse",
-    name: "Sense",
-    key: "sense",
-    icon: <Icon fontSize="small">Sense</Icon>,
-    route: "/sense",
-    component: <Sense />,
+    name: "Trending",
+    key: "trending",
+    icon: <TrendingUpIcon fontSize="small" />,
+    route: "/trending",
+    component: <Trending />,
   },
-
   {
     type: "collapse",
-    name: "See Through It",
-    key: "seethroughtit",
-    icon: <Icon fontSize="small">SeeThroughIt</Icon>,
-    route: "/seethroughit",
-    component: <SeeThroughIt />,
-  },
-
-  {
-    type: "collapse",
-    name: "Simulator",
-    key: "simulator",
-    icon: <Icon fontSize="small">Simulator</Icon>,
-    route: "/simulator",
-    component: <Simulator />,
-  },
-
-  {
-    type: "collapse",
-    name: "Notifications",
-    key: "notifications",
-    icon: <Icon fontSize="small">notifications</Icon>,
-    route: "/notifications",
-    component: <Notifications />,
+    name: "Cameras",
+    key: "cameras",
+    icon: <VideocamIcon fontSize="small" />,
+    route: "/cameras",
+    component: <Cameras />,
   },
   {
     type: "collapse",
     name: "Social Media",
-    key: "profile",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/profile",
-    component: <Profile />,
+    key: "social-media",
+    icon: <PublicIcon fontSize="small" />,
+    route: "/social-media",
+    component: <SocialMedia />,
   },
   {
     type: "collapse",
-    name: "Sign In",
-    key: "sign-in",
-    icon: <Icon fontSize="small">login</Icon>,
-    route: "/authentication/sign-in",
-    component: <SignIn />,
+    name: "Phone Calls",
+    key: "phone-calls",
+    icon: <PhoneIcon fontSize="small" />,
+    route: "/phone-calls",
+    component: <PhoneCalls />,
   },
   {
     type: "collapse",
-    name: "Sign Up",
-    key: "sign-up",
-    icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/authentication/sign-up",
-    component: <SignUp />,
+    name: "Test",
+    key: "test",
+    icon: <Icon>test</Icon>,
+    route: "/test",
+    component: <TestPage />,
   },
 ];
 
