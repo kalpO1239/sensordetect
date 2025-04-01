@@ -181,81 +181,79 @@ function Cameras() {
                 </Tabs>
 
                 <TabPanel value={tabValue} index={0}>
-                  <Grid container spacing={3}>
-                    {cameras.map((camera) => (
-                      <Grid
-                        item
-                        xs={12}
-                        md={viewMode === "grid" ? 6 : 12}
-                        key={camera.id}
+                  <MDBox mb={3}>
+                    <MDTypography variant="h6" color="text">
+                      AlertWest.live Monitoring System
+                    </MDTypography>
+                    <MDTypography variant="body2" color="text">
+                      Comprehensive fire detection camera system with real-time monitoring capabilities.
+                    </MDTypography>
+                  </MDBox>
+                  
+                  <Card>
+                    <MDBox p={2}>
+                      <MDBox 
+                        display="flex" 
+                        justifyContent="space-between" 
+                        alignItems="center" 
+                        mb={2}
+                        bgcolor="error.light"
+                        p={2}
+                        borderRadius="lg"
                       >
-                        <Card>
-                          <MDBox p={2}>
-                            <MDBox
-                              display="flex"
-                              justifyContent="space-between"
-                              alignItems="center"
-                              mb={2}
-                            >
-                              <MDTypography variant="h6" fontWeight="medium">
-                                {camera.name}
-                              </MDTypography>
-                              <MDBox display="flex" alignItems="center">
-                                <MDBox
-                                  width="12px"
-                                  height="12px"
-                                  borderRadius="50%"
-                                  backgroundColor={
-                                    camera.status === "Online"
-                                      ? "success.main"
-                                      : "error.main"
-                                  }
-                                  mr={1}
-                                />
-                                <MDTypography variant="caption" color="text">
-                                  {camera.status}
-                                </MDTypography>
-                              </MDBox>
-                            </MDBox>
-                            <MDTypography variant="body2" color="text" mb={2}>
-                              Location: {camera.location}
-                            </MDTypography>
-                            <MDBox
-                              component="iframe"
-                              src={`https://www.youtube.com/embed/live_stream?channel=UC${camera.id.substring(
-                                3,
-                              )}`}
-                              width="100%"
-                              height={viewMode === "grid" ? "240" : "360"}
-                              sx={{ border: "none" }}
-                              allowFullScreen
-                              title={camera.name}
-                            />
-                            <MDBox
-                              display="flex"
-                              justifyContent="space-between"
-                              mt={2}
-                            >
-                              <MDButton
-                                variant="outlined"
-                                color="info"
-                                size="small"
-                              >
-                                <Icon>fullscreen</Icon>&nbsp;Expand
-                              </MDButton>
-                              <MDButton
-                                variant="outlined"
-                                color="dark"
-                                size="small"
-                              >
-                                <Icon>settings</Icon>&nbsp;Settings
-                              </MDButton>
-                            </MDBox>
-                          </MDBox>
-                        </Card>
-                      </Grid>
-                    ))}
-                  </Grid>
+                        <MDBox>
+                          <MDTypography variant="h6" fontWeight="medium" color="error.dark">
+                            AlertWest Live Feed
+                          </MDTypography>
+                          <MDTypography variant="caption" color="text">
+                            Integrated fire monitoring system
+                          </MDTypography>
+                        </MDBox>
+                        <MDBox display="flex" alignItems="center">
+                          <MDBox
+                            width="12px"
+                            height="12px"
+                            borderRadius="50%"
+                            backgroundColor="success.main"
+                            mr={1}
+                          />
+                          <MDTypography variant="caption" color="text">
+                            Live
+                          </MDTypography>
+                        </MDBox>
+                      </MDBox>
+                      
+                      <iframe 
+                        src="https://alertwest.live" 
+                        width="100%" 
+                        height="700" 
+                        frameBorder="0" 
+                        title="AlertWest Live Camera Feed"
+                        allowFullScreen
+                      />
+                      
+                      <MDBox
+                        display="flex"
+                        justifyContent="space-between"
+                        mt={2}
+                      >
+                        <MDButton
+                          variant="outlined"
+                          color="error"
+                          size="small"
+                        >
+                          <Icon>fullscreen</Icon>&nbsp;Expand
+                        </MDButton>
+                        <MDButton
+                          variant="outlined"
+                          color="dark"
+                          size="small"
+                        >
+                          <Icon>settings</Icon>&nbsp;Settings
+                        </MDButton>
+                      </MDBox>
+                    </MDBox>
+                  </Card>
                 </TabPanel>
 
                 <TabPanel value={tabValue} index={1}>

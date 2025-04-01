@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 // @mui material components
@@ -50,10 +50,71 @@ TabPanel.propTypes = {
 function Trending() {
   const [tabValue, setTabValue] = useState(0);
   const [timeRange, setTimeRange] = useState("month");
+  const [trendingData, setTrendingData] = useState({
+    incidentsByType: {},
+    incidentsByLocation: {},
+    incidentsBySeverity: {},
+    incidentsByTime: []
+  });
+  const [loading, setLoading] = useState(true);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
+  useEffect(() => {
+    const fetchTrendingData = () => {
+      try {
+        // Get data from localStorage
+        const storedIncidents = JSON.parse(localStorage.getItem('fireIncidents') || '[]');
+        
+        const byType = {};
+        const byLocation = {};
+        const bySeverity = {};
+        const byTime = [];
+        
+        storedIncidents.forEach((incident) => {
+          // Count by type
+          const type = incident.eventType || "Unknown";
+          byType[type] = (byType[type] || 0) + 1;
+          
+          // Count by location
+          const location = incident.location || "Unknown";
+          byLocation[location] = (byLocation[location] || 0) + 1;
+          
+          // Count by severity
+          const severity = incident.severity || "Unknown";
+          bySeverity[severity] = (bySeverity[severity] || 0) + 1;
+          
+          // Add to time series
+          if (incident.createdAt) {
+            byTime.push({
+              time: new Date(incident.createdAt),
+              type: type,
+              severity: severity
+            });
+          }
+        });
+        
+        setTrendingData({
+          incidentsByType: byType,
+          incidentsByLocation: byLocation,
+          incidentsBySeverity: bySeverity,
+          incidentsByTime: byTime.sort((a, b) => a.time - b.time)
+        });
+        
+        // Update chart data based on the localStorage data
+        // This is where you would transform the data to match your chart formats
+        
+      } catch (error) {
+        console.error("Error fetching trending data from localStorage:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTrendingData();
+  }, []);
 
   // Mock data for charts
   const incidentsByLocationData = {

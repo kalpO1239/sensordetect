@@ -259,30 +259,6 @@ function PhoneCalls() {
     },
   ];
 
-  // Define prop types for the Cell components
-  const cellPropTypes = {
-    row: PropTypes.shape({
-      original: PropTypes.shape({
-        caller: PropTypes.string,
-        phone: PropTypes.string,
-        description: PropTypes.string,
-        location: PropTypes.string,
-        timestamp: PropTypes.string,
-        duration: PropTypes.string,
-      }),
-    }),
-    value: PropTypes.any,
-  };
-
-  // Assign prop types to each Cell component
-  columns[0].Cell.propTypes = cellPropTypes;
-  columns[1].Cell.propTypes = cellPropTypes;
-  columns[2].Cell.propTypes = cellPropTypes;
-  columns[3].Cell.propTypes = cellPropTypes;
-  columns[4].Cell.propTypes = { value: PropTypes.string };
-  columns[5].Cell.propTypes = { value: PropTypes.string };
-  columns[6].Cell.propTypes = cellPropTypes;
-
   return (
     <DashboardLayout>
       <DashboardNavbar />

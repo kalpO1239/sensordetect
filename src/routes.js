@@ -6,6 +6,7 @@ import Cameras from "layouts/cameras";
 import SocialMedia from "layouts/social-media";
 import PhoneCalls from "layouts/phone-calls";
 import TestPage from "layouts/test";
+import Simulator from "layouts/simulator";
 
 // Icons
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -81,6 +82,14 @@ const routes = [
     icon: <Icon>test</Icon>,
     route: "/test",
     component: <TestPage />,
+  },
+  {
+    type: "collapse",
+    name: "Simulator",
+    key: "simulator",
+    icon: <Icon fontSize="small">science</Icon>,
+    route: "/simulator",
+    component: <Simulator />,
   },
 ];
 

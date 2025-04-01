@@ -196,83 +196,27 @@ function Sensors() {
                 <TabPanel value={tabValue} index={1}>
                   <MDBox mb={3}>
                     <MDTypography variant="h6" color="text">
-                      Live Camera Feeds from AlertWest.live
+                      Live Camera Feed from AlertWest.live
                     </MDTypography>
                     <MDTypography variant="body2" color="text">
-                      These cameras provide real-time monitoring of key
-                      locations for fire detection and response.
+                      This camera provides real-time monitoring for fire detection and response.
                     </MDTypography>
                   </MDBox>
 
                   <Grid container spacing={3}>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12}>
                       <Card>
                         <MDBox p={2}>
                           <MDTypography variant="h6" gutterBottom>
-                            Camera 1 - Main Entrance
+                            AlertWest Live Monitoring
                           </MDTypography>
-                          <MDBox
-                            component="iframe"
-                            src="https://www.youtube.com/embed/live_stream?channel=UCMEbNktA2iQsqLcMqOrScmg"
-                            width="100%"
-                            height="315"
-                            sx={{ border: "none" }}
+                          <iframe 
+                            src="https://alertwest.live" 
+                            width="100%" 
+                            height="700" 
+                            frameBorder="0" 
+                            title="AlertWest Live Camera Feed"
                             allowFullScreen
-                            title="Camera 1"
-                          />
-                        </MDBox>
-                      </Card>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Card>
-                        <MDBox p={2}>
-                          <MDTypography variant="h6" gutterBottom>
-                            Camera 2 - Server Room
-                          </MDTypography>
-                          <MDBox
-                            component="iframe"
-                            src="https://www.youtube.com/embed/live_stream?channel=UCveX_0uBOHVHbpV838OGXVA"
-                            width="100%"
-                            height="315"
-                            sx={{ border: "none" }}
-                            allowFullScreen
-                            title="Camera 2"
-                          />
-                        </MDBox>
-                      </Card>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Card>
-                        <MDBox p={2}>
-                          <MDTypography variant="h6" gutterBottom>
-                            Camera 3 - Warehouse
-                          </MDTypography>
-                          <MDBox
-                            component="iframe"
-                            src="https://www.youtube.com/embed/live_stream?channel=UC8lICYvs1KkVFVJ1jWNADBQ"
-                            width="100%"
-                            height="315"
-                            sx={{ border: "none" }}
-                            allowFullScreen
-                            title="Camera 3"
-                          />
-                        </MDBox>
-                      </Card>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Card>
-                        <MDBox p={2}>
-                          <MDTypography variant="h6" gutterBottom>
-                            Camera 4 - Kitchen Area
-                          </MDTypography>
-                          <MDBox
-                            component="iframe"
-                            src="https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg"
-                            width="100%"
-                            height="315"
-                            sx={{ border: "none" }}
-                            allowFullScreen
-                            title="Camera 4"
                           />
                         </MDBox>
                       </Card>

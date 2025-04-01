@@ -2,6 +2,21 @@ import { useState } from "react";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import { Grid } from "@mui/material";
+import Card from "@mui/material/Card";
+import MDTypography from "components/MDTypography";
+import MDButton from "components/MDButton";
+import Icon from "@mui/material/Icon";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 export default function SimulatorComponent() {
   const [selectedOptions, setSelectedOptions] = useState({
@@ -15,6 +30,14 @@ export default function SimulatorComponent() {
   const [dashboardData, setDashboardData] = useState(null);
   const [saveStatus, setSaveStatus] = useState({ status: "", message: "" });
   const [isLoading, setIsLoading] = useState(false);
+
+  const [scenario, setScenario] = useState("");
+  const [location, setLocation] = useState("");
+  const [intensity, setIntensity] = useState("");
+  const [spreadRate, setSpreadRate] = useState("");
+  const [isSimulationRunning, setIsSimulationRunning] = useState(false);
+  const [affectedSensors, setAffectedSensors] = useState([]);
+  const [simulationLogs, setSimulationLogs] = useState([]);
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
@@ -134,248 +157,555 @@ export default function SimulatorComponent() {
     setSaveStatus({ status: "", message: "" });
   };
 
-  // Save to DynamoDB
-  const saveToDynamoDB = async () => {
+  // Save to local storage
+  const saveToDatabase = async () => {
     if (!dashboardData) return;
 
     setIsLoading(true);
-    setSaveStatus({ status: "loading", message: "Saving to DynamoDB..." });
+    setSaveStatus({ status: "loading", message: "Saving to local storage..." });
 
     try {
-      // In a real implementation, you would use AWS SDK for JavaScript
-      // Here we're simulating an API call to a backend service
-      // that would handle the DynamoDB operations
-
-      // Simulated API call
-      await fetch("/api/save-to-dynamodb", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      // Get existing data
+      const existingData = JSON.parse(localStorage.getItem("fireIncidents") || "[]");
+      
+      // Add new data with timestamp
+      const dataToSave = {
+        id: `incident-${Date.now()}`,
+        eventId: dashboardData.eventId,
+        eventType: dashboardData.eventType,
+        severity: dashboardData.severity,
+        location: location || "Building A",
+        details: dashboardData.message || "Fire incident detected",
+        source: dashboardData.source,
+        createdAt: new Date().toISOString(),
+        timestamp: new Date().toISOString(),
+        simulationParams: {
+          scenario,
+          location,
+          intensity,
+          spreadRate
         },
-        body: JSON.stringify({
-          tableName: "FireAlarmEvents",
-          item: dashboardData,
-        }),
-      });
-      // Simulate successful API response
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Simulate successful DB insertion
+        affectedSensors
+      };
+      
+      // Save updated data
+      localStorage.setItem("fireIncidents", JSON.stringify([dataToSave, ...existingData]));
+      
       setSaveStatus({
         status: "success",
-        message:
-          "Event ${dashboardData.eventId} successfully saved to DynamoDB.",
+        message: `Event ${dashboardData.eventId} successfully saved to local storage`
       });
-
-      // In a real implementation, you would check the response and handle errors
-      // if (!response.ok) {
-      //   throw new Error('Failed to save to DynamoDB');
-      // }
     } catch (error) {
-      console.error("Error saving to DynamoDB:", error);
+      console.error("Error saving to local storage:", error);
       setSaveStatus({
         status: "error",
-        message: `Failed to save to DynamoDB: ${error.message}`,
+        message: `Failed to save: ${error.message}`
       });
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleScenarioChange = (event) => {
+    setScenario(event.target.value);
+  };
+
+  const handleLocationChange = (event) => {
+    setLocation(event.target.value);
+  };
+
+  const handleIntensityChange = (event) => {
+    setIntensity(event.target.value);
+  };
+
+  const handleSpreadRateChange = (event) => {
+    setSpreadRate(event.target.value);
+  };
+
+  const handleStartSimulation = () => {
+    setIsSimulationRunning(true);
+    
+    // Generate mock affected sensors based on the scenario
+    const mockSensors = [
+      {
+        id: "SNS-001",
+        type: "Smoke Detector",
+        location: location || "Building A",
+        reading: "High smoke concentration"
+      },
+      {
+        id: "SNS-002",
+        type: "Heat Sensor",
+        location: location || "Building A",
+        reading: "Temperature: 180°F"
+      },
+      {
+        id: "SNS-003",
+        type: "CO Detector",
+        location: location || "Building A",
+        reading: "CO Level: 150 ppm"
+      }
+    ];
+    
+    setAffectedSensors(mockSensors);
+    
+    // Generate mock simulation logs
+    const currentTime = new Date();
+    const mockLogs = [
+      {
+        type: 'info',
+        timestamp: new Date(currentTime.getTime() - 5000).toLocaleTimeString(),
+        message: `Simulation started: ${scenario || 'Default'} scenario at ${location || 'Building A'}`
+      },
+      {
+        type: 'alert',
+        timestamp: new Date(currentTime.getTime() - 3000).toLocaleTimeString(),
+        message: `Smoke detector SNS-001 triggered at ${location || 'Building A'}`
+      },
+      {
+        type: 'alert',
+        timestamp: new Date(currentTime.getTime() - 1000).toLocaleTimeString(),
+        message: `Heat sensor SNS-002 reporting dangerous temperature levels`
+      },
+      {
+        type: 'info',
+        timestamp: currentTime.toLocaleTimeString(),
+        message: `Alerting emergency response teams to ${location || 'Building A'}`
+      }
+    ];
+    
+    setSimulationLogs(mockLogs);
+  };
+
+  const handleStopSimulation = () => {
+    setIsSimulationRunning(false);
+    
+    // Add a stop message to the logs
+    const currentTime = new Date().toLocaleTimeString();
+    setSimulationLogs([
+      ...simulationLogs,
+      {
+        type: 'info',
+        timestamp: currentTime,
+        message: 'Simulation stopped by user'
+      }
+    ]);
+  };
+
   return (
-    <MDBox>
+    <Card>
+      <MDBox
+        mx={2}
+        mt={-3}
+        py={3}
+        px={2}
+        variant="gradient"
+        bgColor="error"
+        borderRadius="lg"
+        coloredShadow="error"
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <MDTypography variant="h6" color="white">
+          Fire Detection Simulator
+        </MDTypography>
+        <MDButton variant="gradient" color="dark" size="small" onClick={resetSimulator}>
+          <Icon>refresh</Icon>&nbsp;Reset
+        </MDButton>
+      </MDBox>
+      <MDBox p={3}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6} lg={8}>
-          <div>
-            {/* Simulator Panel */}
-            <div>
-              <MDBox display="flex" alignItems="center">
-                Simulator
+          <Grid item xs={12} md={6}>
+            <Card sx={{ height: '100%', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+              <MDBox p={2}>
+                <MDTypography variant="h6" gutterBottom color="error">
+                  Simulation Controls
+                </MDTypography>
+                <Divider sx={{ mb: 2, borderColor: 'rgba(0,0,0,0.1)' }} />
+                <MDBox mb={2}>
+                  <MDTypography variant="button" fontWeight="regular" color="text">
+                    Select a scenario to simulate fire detection events
+                  </MDTypography>
               </MDBox>
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="n5Sensor"
-                    name="n5Sensor"
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="scenario-select-label">Scenario</InputLabel>
+                      <Select
+                        labelId="scenario-select-label"
+                        id="scenario-select"
+                        value={scenario}
+                        label="Scenario"
+                        onChange={handleScenarioChange}
+                        sx={{ '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0,0,0,0.2)' } }}
+                      >
+                        <MenuItem value="kitchen">Kitchen Fire</MenuItem>
+                        <MenuItem value="electrical">Electrical Fire</MenuItem>
+                        <MenuItem value="chemical">Chemical Fire</MenuItem>
+                        <MenuItem value="wildfire">Wildfire Approaching</MenuItem>
+                        <MenuItem value="custom">Custom Scenario</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="location-select-label">Location</InputLabel>
+                      <Select
+                        labelId="location-select-label"
+                        id="location-select"
+                        value={location}
+                        label="Location"
+                        onChange={handleLocationChange}
+                        sx={{ '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0,0,0,0.2)' } }}
+                      >
+                        <MenuItem value="building-a">Building A</MenuItem>
+                        <MenuItem value="building-b">Building B</MenuItem>
+                        <MenuItem value="warehouse">Warehouse</MenuItem>
+                        <MenuItem value="server-room">Server Room</MenuItem>
+                        <MenuItem value="cafeteria">Cafeteria</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <FormControl fullWidth>
+                      <InputLabel id="intensity-select-label">Fire Intensity</InputLabel>
+                      <Select
+                        labelId="intensity-select-label"
+                        id="intensity-select"
+                        value={intensity}
+                        label="Fire Intensity"
+                        onChange={handleIntensityChange}
+                        sx={{ '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0,0,0,0.2)' } }}
+                      >
+                        <MenuItem value="low">Low</MenuItem>
+                        <MenuItem value="medium">Medium</MenuItem>
+                        <MenuItem value="high">High</MenuItem>
+                        <MenuItem value="critical">Critical</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <FormControl fullWidth>
+                      <InputLabel id="spread-select-label">Spread Rate</InputLabel>
+                      <Select
+                        labelId="spread-select-label"
+                        id="spread-select"
+                        value={spreadRate}
+                        label="Spread Rate"
+                        onChange={handleSpreadRateChange}
+                        sx={{ '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0,0,0,0.2)' } }}
+                      >
+                        <MenuItem value="slow">Slow</MenuItem>
+                        <MenuItem value="moderate">Moderate</MenuItem>
+                        <MenuItem value="fast">Fast</MenuItem>
+                        <MenuItem value="explosive">Explosive</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                
+                <MDBox mt={3}>
+                  <MDTypography variant="button" fontWeight="medium" color="text" mb={1} display="block">
+                    Event Types:
+                  </MDTypography>
+                  <Grid container spacing={1}>
+                    <Grid item xs={12} md={6}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
                     checked={selectedOptions.n5Sensor}
                     onChange={handleCheckboxChange}
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                  />
-                  <label htmlFor="n5Sensor" className="ml-2 text-gray-700">
-                    Fire Alarm from N5 Sensor
-                  </label>
-                </div>
-
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="warning"
-                    name="warning"
+                            name="n5Sensor"
+                            sx={{ color: 'error.main', '&.Mui-checked': { color: 'error.main' } }}
+                          />
+                        }
+                        label="N5 Sensor Alert"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
                     checked={selectedOptions.warning}
                     onChange={handleCheckboxChange}
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                  />
-                  <label htmlFor="warning" className="ml-2 text-gray-700">
-                    Warning
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="maintenance"
-                    name="maintenance"
-                    checked={selectedOptions.maintenance}
-                    onChange={handleCheckboxChange}
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                  />
-                  <label htmlFor="maintenance" className="ml-2 text-gray-700">
-                    Under Maintenance
-                  </label>
-                </div>
-
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="cameraDetection"
-                    name="cameraDetection"
+                            name="warning"
+                            sx={{ color: 'warning.main', '&.Mui-checked': { color: 'warning.main' } }}
+                          />
+                        }
+                        label="Warning Event"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
                     checked={selectedOptions.cameraDetection}
                     onChange={handleCheckboxChange}
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                  />
-                  <label
-                    htmlFor="cameraDetection"
-                    className="ml-2 text-gray-700"
-                  >
-                    Camera detected Fire Incident
-                  </label>
-                </div>
-
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="phoneCall"
-                    name="phoneCall"
+                            name="cameraDetection"
+                            sx={{ color: 'error.main', '&.Mui-checked': { color: 'error.main' } }}
+                          />
+                        }
+                        label="Camera Detection"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
                     checked={selectedOptions.phoneCall}
                     onChange={handleCheckboxChange}
-                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                  />
-                  <label htmlFor="phoneCall" className="ml-2 text-gray-700">
-                    Phone call received with Fire Incident
-                  </label>
-                </div>
-              </div>
-
-              <div className="flex space-x-3">
-                <button
-                  onClick={resetSimulator}
-                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
+                            name="phoneCall"
+                            sx={{ color: 'error.main', '&.Mui-checked': { color: 'error.main' } }}
+                          />
+                        }
+                        label="Phone Call Report"
+                      />
+                    </Grid>
+                  </Grid>
+                </MDBox>
+                
+                <Divider sx={{ my: 2, borderColor: 'rgba(0,0,0,0.1)' }} />
+                
+                <MDBox display="flex" justifyContent="space-between">
+                  <MDButton 
+                    variant="gradient" 
+                    color="error" 
+                    onClick={handleStartSimulation}
+                    disabled={isSimulationRunning}
+                  >
+                    <Icon>play_arrow</Icon>&nbsp;
+                    Start Simulation
+                  </MDButton>
+                  <MDButton 
+                    variant="outlined" 
+                    color="dark" 
+                    onClick={handleStopSimulation}
+                    disabled={!isSimulationRunning}
+                  >
+                    <Icon>stop</Icon>&nbsp;
+                    Stop Simulation
+                  </MDButton>
+                </MDBox>
+              </MDBox>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Card sx={{ height: '100%', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+              <MDBox p={2}>
+                <MDTypography variant="h6" gutterBottom color="error">
+                  Simulation Status
+                </MDTypography>
+                <Divider sx={{ mb: 2, borderColor: 'rgba(0,0,0,0.1)' }} />
+                <MDBox 
+                  bgcolor={isSimulationRunning ? "error.light" : "background.paper"}
+                  p={2}
+                  borderRadius="lg"
+                  mb={2}
+                  sx={{ 
+                    transition: 'background-color 0.3s ease',
+                    border: '1px solid',
+                    borderColor: isSimulationRunning ? 'error.main' : 'divider'
+                  }}
                 >
-                  Reset
-                </button>
-
-                <button
-                  onClick={saveToDynamoDB}
-                  disabled={!dashboardData || isLoading}
-                  className={`px-4 py-2 rounded transition-colors ${
-                    !dashboardData || isLoading
-                      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                      : "bg-blue-600 text-white hover:bg-blue-700"
-                  }`}
-                >
-                  {isLoading ? "Saving..." : "Save to DynamoDB"}
-                </button>
-              </div>
-
-              {saveStatus.message && (
-                <div
-                  className={`mt-4 p-3 rounded ${
-                    saveStatus.status === "success"
-                      ? "bg-green-100 text-green-800"
-                      : saveStatus.status === "error"
-                      ? "bg-red-100 text-red-800"
-                      : "bg-blue-100 text-blue-800"
-                  }`}
-                >
-                  {saveStatus.message}
-                </div>
-              )}
-            </div>
-            <br></br>
-            <br></br>
-
-            {/* Dashboard Display */}
-            <div className="bg-white rounded-lg shadow p-6 lg:col-span-2">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">
-                Dashboard
-              </h2>
-
-              {dashboardData ? (
-                <div>
-                  <div className="flex justify-between mb-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${getSeverityClass(
-                        dashboardData.severity,
-                      )}`}
+                  <MDTypography variant="button" fontWeight="bold" color={isSimulationRunning ? "error" : "text"}>
+                    Status: {isSimulationRunning ? "SIMULATION ACTIVE" : "Idle"}
+                  </MDTypography>
+                  {isSimulationRunning && (
+                    <MDBox mt={1}>
+                      <MDTypography variant="caption" color="text">
+                        Simulating {scenario || 'default'} scenario at {location || 'default location'} with {intensity || 'medium'} intensity
+                      </MDTypography>
+                    </MDBox>
+                  )}
+                </MDBox>
+                
+                {dashboardData && (
+                  <MDBox 
+                    bgcolor="grey.100" 
+                    p={2} 
+                    borderRadius="lg" 
+                    mb={2}
+                    border="1px solid"
+                    borderColor="divider"
+                  >
+                    <MDTypography variant="button" fontWeight="bold" color="text" mb={1} display="block">
+                      Event Data:
+                    </MDTypography>
+                    <Grid container spacing={1}>
+                      <Grid item xs={4}>
+                        <MDTypography variant="caption" color="text" fontWeight="medium">
+                          ID:
+                        </MDTypography>
+                      </Grid>
+                      <Grid item xs={8}>
+                        <MDTypography variant="caption" color="text">
+                          {dashboardData.eventId}
+                        </MDTypography>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <MDTypography variant="caption" color="text" fontWeight="medium">
+                          Type:
+                        </MDTypography>
+                      </Grid>
+                      <Grid item xs={8}>
+                        <MDTypography variant="caption" color="text">
+                          {dashboardData.eventType}
+                        </MDTypography>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <MDTypography variant="caption" color="text" fontWeight="medium">
+                          Severity:
+                        </MDTypography>
+                      </Grid>
+                      <Grid item xs={8}>
+                        <MDBox 
+                          component="span" 
+                          px={1} 
+                          py={0.5} 
+                          borderRadius="sm" 
+                          bgcolor={
+                            dashboardData.severity === "CRITICAL" ? "error.main" :
+                            dashboardData.severity === "HIGH" ? "error.light" :
+                            dashboardData.severity === "MEDIUM" ? "warning.main" : "info.main"
+                          }
+                          color="white"
+                          fontSize="0.65rem"
+                          fontWeight="medium"
+                        >
+                          {dashboardData.severity}
+                        </MDBox>
+                      </Grid>
+                    </Grid>
+                    <MDButton 
+                      variant="text" 
+                      color="info" 
+                      size="small" 
+                      onClick={saveToDatabase}
+                      disabled={isLoading}
+                      sx={{ mt: 1 }}
                     >
-                      {dashboardData.severity}
-                    </span>
-                    <span className="text-gray-500 text-sm">
-                      {new Date(dashboardData.timestamp).toLocaleString()}
-                    </span>
-                  </div>
-
-                  <div className="border border-gray-200 rounded-lg p-4 mb-4 bg-gray-50">
-                    <div className="flex justify-between items-center mb-2">
-                      <h3 className="text-lg font-medium text-gray-800">
-                        {dashboardData.eventType}
-                      </h3>
-                      <span className="text-xs font-mono text-gray-500">
-                        {dashboardData.eventId}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                      <div>
-                        <p className="text-sm text-gray-500">Source</p>
-                        <p className="font-medium">{dashboardData.source}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">Location</p>
-                        <p className="font-medium">{dashboardData.location}</p>
-                      </div>
-                    </div>
-                    <div className="mb-4">
-                      <p className="text-sm text-gray-500">Details</p>
-                      <p className="font-medium">{dashboardData.details}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">Action Required</p>
-                      <p className="font-medium">
-                        {dashboardData.actionRequired}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="bg-gray-100 p-4 rounded-lg overflow-auto">
-                    <h3 className="text-sm font-mono mb-2 text-gray-700">
-                      JSON Output:
-                    </h3>
-                    <pre className="text-xs font-mono">
-                      {JSON.stringify(dashboardData, null, 2)}
-                    </pre>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center h-64 text-gray-400">
-                  <p>Select an option from the simulator to view data</p>
-                </div>
-              )}
-            </div>
-          </div>
-          <br></br>
-          <br></br>
-        </Grid>
+                      <Icon fontSize="small">save</Icon>&nbsp;
+                      {isLoading ? "Saving..." : "Save to Local Storage"}
+                    </MDButton>
+                    {saveStatus.message && (
+                      <MDTypography 
+                        variant="caption" 
+                        color={saveStatus.status === "success" ? "success" : "error"}
+                        mt={1}
+                        display="block"
+                      >
+                        {saveStatus.message}
+                      </MDTypography>
+                    )}
+                  </MDBox>
+                )}
+                
+                <MDBox>
+                  <MDTypography variant="button" fontWeight="medium" color="text" mb={1} display="block">
+                    Affected Sensors:
+                  </MDTypography>
+                  <List 
+                    sx={{ 
+                      bgcolor: 'background.paper', 
+                      border: '1px solid', 
+                      borderColor: 'divider',
+                      borderRadius: 1,
+                      maxHeight: '200px',
+                      overflow: 'auto'
+                    }}
+                  >
+                    {affectedSensors.map((sensor) => (
+                      <ListItem key={sensor.id} sx={{ py: 0.5 }}>
+                        <ListItemIcon sx={{ minWidth: 36 }}>
+                          <Icon color="error" fontSize="small">warning</Icon>
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={
+                            <MDTypography variant="button" fontWeight="medium">
+                              {sensor.id} - {sensor.type}
+                            </MDTypography>
+                          }
+                          secondary={
+                            <MDTypography variant="caption" color="text">
+                              Location: {sensor.location} | Reading: {sensor.reading}
+                            </MDTypography>
+                          }
+                        />
+                      </ListItem>
+                    ))}
+                    {!affectedSensors.length && !isSimulationRunning && (
+                      <ListItem>
+                        <ListItemText
+                          primary={
+                            <MDTypography variant="button" fontWeight="regular">
+                              No sensors affected
+                            </MDTypography>
+                          }
+                          secondary={
+                            <MDTypography variant="caption" color="text">
+                              Start a simulation to see affected sensors
+                            </MDTypography>
+                          }
+                        />
+                      </ListItem>
+                    )}
+                  </List>
+                </MDBox>
+              </MDBox>
+            </Card>
+          </Grid>
+          <Grid item xs={12}>
+            <Card sx={{ boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+              <MDBox p={2}>
+                <MDTypography variant="h6" gutterBottom color="error">
+                  Simulation Log
+                </MDTypography>
+                <Divider sx={{ mb: 2, borderColor: 'rgba(0,0,0,0.1)' }} />
+                <MDBox
+                  sx={{
+                    maxHeight: '200px',
+                    overflowY: 'auto',
+                    bgcolor: 'grey.100',
+                    p: 2,
+                    borderRadius: 1,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                  }}
+                >
+                  {simulationLogs.length > 0 ? (
+                    simulationLogs.map((log, index) => (
+                      <MDBox key={index} mb={1} display="flex" alignItems="flex-start">
+                        <MDBox
+                          component="span"
+                          bgColor={log.type === 'alert' ? 'error.main' : 'info.main'}
+                          color="white"
+                          px={1}
+                          borderRadius="sm"
+                          fontSize="0.75rem"
+                          mr={1}
+                        >
+                          {log.type.toUpperCase()}
+                        </MDBox>
+                        <MDTypography variant="caption" fontWeight="medium">
+                          {log.timestamp}:
+                        </MDTypography>
+                        <MDTypography variant="caption" ml={1}>
+                          {log.message}
+                        </MDTypography>
+                      </MDBox>
+                    ))
+                  ) : (
+                    <MDTypography variant="body2" color="text">
+                      No simulation logs available. Start a simulation to see logs.
+                    </MDTypography>
+                  )}
+                </MDBox>
+              </MDBox>
+            </Card>
+          </Grid>
       </Grid>
     </MDBox>
+    </Card>
   );
 }

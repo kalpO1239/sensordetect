@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+// Remove Firebase imports
+// import { db } from "../../firebase";
+// import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -33,15 +36,53 @@ function Incidents() {
   const [priorityFilter, setPriorityFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
   const [menu, setMenu] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const openMenu = (event) => setMenu(event.currentTarget);
   const closeMenu = () => setMenu(null);
 
   useEffect(() => {
-    // Generate mock incidents
-    const mockIncidents = generateMockIncidents(30);
-    setIncidents(mockIncidents);
-    setFilteredIncidents(mockIncidents);
+    const fetchIncidents = () => {
+      try {
+        // Get data from localStorage
+        const storedIncidents = JSON.parse(localStorage.getItem("fireIncidents") || "[]");
+        
+        if (storedIncidents.length > 0) {
+          // Format the data
+          const formattedIncidents = storedIncidents.map(incident => ({
+            id: incident.eventId || incident.id,
+            location: incident.location || "Unknown",
+            description: incident.details || "No description",
+            priority: 
+              incident.severity === "CRITICAL" || incident.severity === "HIGH" 
+                ? "High" 
+                : incident.severity === "MEDIUM" 
+                  ? "Medium" 
+                  : "Low",
+            status: "New",
+            date: new Date(incident.createdAt || incident.timestamp || Date.now())
+          }));
+          
+          setIncidents(formattedIncidents);
+          setFilteredIncidents(formattedIncidents);
+        } else {
+          // Fallback to mock data if no incidents in localStorage
+          const mockIncidents = generateMockIncidents(5);
+          setIncidents(mockIncidents);
+          setFilteredIncidents(mockIncidents);
+        }
+      } catch (error) {
+        console.error("Error fetching incidents from localStorage:", error);
+        // Fallback to mock data if localStorage fails
+        const mockIncidents = generateMockIncidents(5);
+        setIncidents(mockIncidents);
+        setFilteredIncidents(mockIncidents);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchIncidents();
   }, []);
 
   useEffect(() => {
