@@ -21,7 +21,7 @@ Coded by www.creative-tim.com
 
 const colors = {
   background: {
-    default: "#f0f2f5",
+    default: "#f8f5f0",
   },
 
   text: {
@@ -45,43 +45,43 @@ const colors = {
   },
 
   primary: {
-    main: "#e91e63",
-    focus: "#e91e63",
+    main: "#e94a1e", // Bright red-orange
+    focus: "#d43a10",
   },
 
   secondary: {
-    main: "#7b809a",
-    focus: "#8f93a9",
+    main: "#f7b731", // Golden yellow
+    focus: "#e6a618",
   },
 
   info: {
-    main: "#1A73E8",
-    focus: "#1662C4",
+    main: "#ff6b35", // Coral
+    focus: "#ff8c5a",
   },
 
   success: {
-    main: "#4CAF50",
+    main: "#4CAF50", // Keep green for success
     focus: "#67bb6a",
   },
 
   warning: {
-    main: "#fb8c00",
-    focus: "#fc9d26",
+    main: "#ffb302", // Amber
+    focus: "#ffc233",
   },
 
   error: {
-    main: "#F44335",
-    focus: "#f65f53",
+    main: "#d91e18", // Deep red
+    focus: "#f44336",
   },
 
   light: {
-    main: "#f0f2f5",
-    focus: "#f0f2f5",
+    main: "#f8f5f0",
+    focus: "#f8f5f0",
   },
 
   dark: {
-    main: "#344767",
-    focus: "#2c3c58",
+    main: "#3d2c29", // Dark brown
+    focus: "#2c1f1d",
   },
 
   grey: {
@@ -98,18 +98,18 @@ const colors = {
 
   gradients: {
     primary: {
-      main: "#EC407A",
-      state: "#D81B60",
+      main: "#e94a1e",
+      state: "#d43a10",
     },
 
     secondary: {
-      main: "#747b8a",
-      state: "#495361",
+      main: "#f7b731",
+      state: "#e6a618",
     },
 
     info: {
-      main: "#49a3f1",
-      state: "#1A73E8",
+      main: "#ff6b35",
+      state: "#ff8c5a",
     },
 
     success: {
@@ -118,13 +118,13 @@ const colors = {
     },
 
     warning: {
-      main: "#FFA726",
-      state: "#FB8C00",
+      main: "#ffb302",
+      state: "#ffc233",
     },
 
     error: {
-      main: "#EF5350",
-      state: "#E53935",
+      main: "#d91e18",
+      state: "#c31914",
     },
 
     light: {
@@ -133,8 +133,8 @@ const colors = {
     },
 
     dark: {
-      main: "#42424a",
-      state: "#191919",
+      main: "#3d2c29",
+      state: "#2c1f1d",
     },
   },
 
@@ -202,18 +202,18 @@ const colors = {
 
   badgeColors: {
     primary: {
-      background: "#f8b3ca",
-      text: "#cc084b",
+      background: "#ffe0d0",
+      text: "#e94a1e",
     },
 
     secondary: {
-      background: "#d7d9e1",
-      text: "#6c757d",
+      background: "#fff3d0",
+      text: "#f7b731",
     },
 
     info: {
-      background: "#aecef7",
-      text: "#095bc6",
+      background: "#ffe8e0",
+      text: "#ff6b35",
     },
 
     success: {
@@ -222,13 +222,13 @@ const colors = {
     },
 
     warning: {
-      background: "#ffd59f",
-      text: "#c87000",
+      background: "#fff5d0",
+      text: "#ffb302",
     },
 
     error: {
-      background: "#fcd3d0",
-      text: "#f61200",
+      background: "#ffd0d0",
+      text: "#d91e18",
     },
 
     light: {
@@ -237,26 +237,26 @@ const colors = {
     },
 
     dark: {
-      background: "#8097bf",
-      text: "#1e2e4a",
+      background: "#d0c0bd",
+      text: "#3d2c29",
     },
   },
 
   coloredShadows: {
-    primary: "#e91e62",
-    secondary: "#110e0e",
-    info: "#00bbd4",
+    primary: "#e94a1e",
+    secondary: "#f7b731",
+    info: "#ff6b35",
     success: "#4caf4f",
-    warning: "#ff9900",
-    error: "#f44336",
+    warning: "#ffb302",
+    error: "#d91e18",
     light: "#adb5bd",
-    dark: "#404040",
+    dark: "#3d2c29",
   },
 
   inputBorderColor: "#d2d6da",
 
   tabs: {
-    indicator: { boxShadow: "#ddd" },
+    indicator: { boxShadow: "#ffe0d0" },
   },
 };
 

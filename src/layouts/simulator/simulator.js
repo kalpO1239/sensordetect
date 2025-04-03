@@ -230,25 +230,63 @@ export default function SimulatorComponent() {
   const handleStartSimulation = () => {
     setIsSimulationRunning(true);
 
+    // Map intensity to severity
+    let severity;
+    switch (intensity) {
+      case "low":
+        severity = "LOW";
+        break;
+      case "medium":
+        severity = "MEDIUM";
+        break;
+      case "high":
+        severity = "HIGH";
+        break;
+      case "extreme":
+        severity = "CRITICAL";
+        break;
+      default:
+        severity = "MEDIUM"; // Default
+    }
+
     // Generate mock affected sensors based on the scenario
     const mockSensors = [
       {
         id: "SNS-001",
         type: "Smoke Detector",
         location: location || "Building A",
-        reading: "High smoke concentration",
+        reading: 
+          severity === "LOW"
+            ? "Low smoke concentration"
+            : severity === "MEDIUM"
+              ? "Medium smoke concentration"
+              : "High smoke concentration",
       },
       {
         id: "SNS-002",
         type: "Heat Sensor",
         location: location || "Building A",
-        reading: "Temperature: 180°F",
+        reading: 
+          severity === "LOW"
+            ? "Temperature: 120°F"
+            : severity === "MEDIUM"
+              ? "Temperature: 150°F"
+              : severity === "HIGH"
+                ? "Temperature: 180°F"
+                : "Temperature: 220°F",
       },
       {
         id: "SNS-003",
         type: "CO Detector",
         location: location || "Building A",
-        reading: "CO Level: 150 ppm",
+        reading: 
+          severity === "LOW"
+            ? "CO Level: 50 ppm"
+            : severity === "MEDIUM"
+              ? "CO Level: 100 ppm"
+              : severity === "HIGH"
+                ? "CO Level: 150 ppm"
+                : "CO Level: 200+ ppm",
       },
     ];
 
@@ -273,19 +311,32 @@ export default function SimulatorComponent() {
       },
       {
         type: "alert",
-        timestamp: new Date(currentTime.getTime() - 1000).toLocaleTimeString(),
-        message: `Heat sensor SNS-002 reporting dangerous temperature levels`,
+        timestamp: new Date(currentTime.getTime() - 2000).toLocaleTimeString(),
+        message: `Fire alert: ${severity} severity detected`,
       },
       {
         type: "info",
-        timestamp: currentTime.toLocaleTimeString(),
-        message: `Alerting emergency response teams to ${
-          location || "Building A"
-        }`,
+        timestamp: new Date().toLocaleTimeString(),
+        message: `Response team notified for ${location || "Building A"}`,
       },
     ];
 
     setSimulationLogs(mockLogs);
+
+    // Generate mock dashboard data
+    const eventId = `FIRE-${Math.floor(Math.random() * 10000)}`;
+    const mockDashboardData = {
+      eventId,
+      eventType: "Fire Alert",
+      severity: severity,
+      source: "Simulator",
+      timestamp: new Date().toISOString(),
+      message: `${severity} fire detected at ${location || "Building A"}`,
+      details: `${scenario || "Default"} fire scenario with 
+        ${intensity || "medium"} intensity and ${spreadRate || "medium"} spread rate.`,
+    };
+
+    setDashboardData(mockDashboardData);
   };
 
   const handleStopSimulation = () => {
@@ -331,7 +382,7 @@ export default function SimulatorComponent() {
         </MDButton>
       </MDBox>
       <MDBox p={3}>
-        <Grid container spacing={3}>
+      <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <Card
               sx={{ height: "100%", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}
@@ -349,7 +400,7 @@ export default function SimulatorComponent() {
                   >
                     Select a scenario to simulate fire detection events
                   </MDTypography>
-                </MDBox>
+              </MDBox>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <FormControl fullWidth>
@@ -423,7 +474,7 @@ export default function SimulatorComponent() {
                         <MenuItem value="low">Low</MenuItem>
                         <MenuItem value="medium">Medium</MenuItem>
                         <MenuItem value="high">High</MenuItem>
-                        <MenuItem value="critical">Critical</MenuItem>
+                        <MenuItem value="extreme">Extreme (Critical)</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
@@ -468,8 +519,8 @@ export default function SimulatorComponent() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={selectedOptions.n5Sensor}
-                            onChange={handleCheckboxChange}
+                    checked={selectedOptions.n5Sensor}
+                    onChange={handleCheckboxChange}
                             name="n5Sensor"
                             sx={{
                               color: "error.main",
@@ -484,8 +535,8 @@ export default function SimulatorComponent() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={selectedOptions.warning}
-                            onChange={handleCheckboxChange}
+                    checked={selectedOptions.warning}
+                    onChange={handleCheckboxChange}
                             name="warning"
                             sx={{
                               color: "warning.main",
@@ -500,8 +551,8 @@ export default function SimulatorComponent() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={selectedOptions.cameraDetection}
-                            onChange={handleCheckboxChange}
+                    checked={selectedOptions.cameraDetection}
+                    onChange={handleCheckboxChange}
                             name="cameraDetection"
                             sx={{
                               color: "error.main",
@@ -516,8 +567,8 @@ export default function SimulatorComponent() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={selectedOptions.phoneCall}
-                            onChange={handleCheckboxChange}
+                    checked={selectedOptions.phoneCall}
+                    onChange={handleCheckboxChange}
                             name="phoneCall"
                             sx={{
                               color: "error.main",
@@ -668,8 +719,8 @@ export default function SimulatorComponent() {
                           color="white"
                           fontSize="0.65rem"
                           fontWeight="medium"
-                        >
-                          {dashboardData.severity}
+                    >
+                      {dashboardData.severity}
                         </MDBox>
                       </Grid>
                     </Grid>
@@ -819,8 +870,8 @@ export default function SimulatorComponent() {
               </MDBox>
             </Card>
           </Grid>
-        </Grid>
-      </MDBox>
+      </Grid>
+    </MDBox>
     </Card>
   );
 }

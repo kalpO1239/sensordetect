@@ -6,10 +6,10 @@ module.exports = {
     es6: true,
   },
   extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:prettier/recommended',
+    "react-app",
+    "prettier"
   ],
+  plugins: ["prettier"],
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module',
@@ -23,10 +23,10 @@ module.exports = {
     },
   },
   rules: {
-    'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+    "prettier/prettier": "off",
+    "react/prop-types": "warn",
+    "no-unused-vars": "warn",
     'react/react-in-jsx-scope': 'off',
-    'react/prop-types': 'warn', // Change to 'error' if you want to enforce all prop types
-    'no-unused-vars': 'warn',
     'react/display-name': 'off',
   },
 }; 

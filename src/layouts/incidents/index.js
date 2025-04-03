@@ -51,21 +51,34 @@ function Incidents() {
 
         if (storedIncidents.length > 0) {
           // Format the data
-          const formattedIncidents = storedIncidents.map((incident) => ({
-            id: incident.eventId || incident.id,
-            location: incident.location || "Unknown",
-            description: incident.details || "No description",
-            priority:
-              incident.severity === "CRITICAL" || incident.severity === "HIGH"
-                ? "High"
-                : incident.severity === "MEDIUM"
-                ? "Medium"
-                : "Low",
-            status: "New",
-            date: new Date(
-              incident.createdAt || incident.timestamp || Date.now(),
-            ),
-          }));
+          const formattedIncidents = storedIncidents.map((incident) => {
+            // Map severity to priority
+            let priority;
+            switch (incident.severity) {
+              case "CRITICAL":
+                priority = "Critical";
+                break;
+              case "HIGH":
+                priority = "High";
+                break;
+              case "MEDIUM":
+                priority = "Medium";
+                break;
+              default:
+                priority = "Low";
+            }
+
+            return {
+              id: incident.eventId || incident.id,
+              location: incident.location || "Unknown",
+              description: incident.details || "No description",
+              priority,
+              status: "New",
+              date: new Date(
+                incident.createdAt || incident.timestamp || Date.now(),
+              ),
+            };
+          });
 
           setIncidents(formattedIncidents);
           setFilteredIncidents(formattedIncidents);
@@ -90,10 +103,9 @@ function Incidents() {
   }, []);
 
   useEffect(() => {
-    // Apply filters
-    let filtered = incidents;
+    let filtered = [...incidents];
 
-    // Apply search term
+    // Apply search filter
     if (searchTerm) {
       filtered = filtered.filter(
         (incident) =>
@@ -116,6 +128,13 @@ function Incidents() {
         (incident) => incident.status === statusFilter,
       );
     }
+
+    // Add a hidden sort value for priority that the table can use for sorting
+    filtered = filtered.map((incident) => ({
+      ...incident,
+      prioritySortValue: 
+        { Critical: 1, High: 2, Medium: 3, Low: 4 }[incident.priority] || 999,
+    }));
 
     setFilteredIncidents(filtered);
   }, [incidents, searchTerm, priorityFilter, statusFilter]);
@@ -148,39 +167,44 @@ function Incidents() {
     }
   };
 
+  // First, let's keep the custom sort function for priority
+  const sortByPriority = (a, b) => {
+    const priorityOrder = { Critical: 1, High: 2, Medium: 3, Low: 4 };
+    return priorityOrder[a] - priorityOrder[b];
+  };
+
+  // Update the columns definition to use the custom sort function
   const columns = [
     { Header: "ID", accessor: "id", width: "10%" },
-    { Header: "Location", accessor: "location", width: "20%" },
-    { Header: "Description", accessor: "description", width: "25%" },
-    {
-      Header: "Priority",
+    { Header: "Location", accessor: "location", width: "15%" },
+    { Header: "Description", accessor: "description", width: "30%" },
+    { 
+      Header: "Priority", 
       accessor: "priority",
-      width: "10%",
+      sortDescFirst: false, // Sort ascending first (Critical -> Low)
+      sortType: (rowA, rowB) => (
+        rowA.original.prioritySortValue - rowB.original.prioritySortValue
+      ),
       Cell: ({ value }) => (
         <Chip
           label={value}
-          color={getPriorityColor(value)}
+          color={
+            value === "Critical"
+              ? "error"
+              : value === "High"
+                ? "warning"
+                : value === "Medium"
+                  ? "info"
+                  : "default"
+          }
           size="small"
-          sx={{ fontWeight: "bold" }}
         />
       ),
     },
-    {
-      Header: "Status",
-      accessor: "status",
-      width: "10%",
-      Cell: ({ value }) => (
-        <Chip
-          label={value}
-          color={getStatusColor(value)}
-          size="small"
-          sx={{ fontWeight: "bold" }}
-        />
-      ),
-    },
-    {
-      Header: "Date",
-      accessor: "date",
+    { Header: "Status", accessor: "status", width: "15%" },
+    { 
+      Header: "Date", 
+      accessor: "date", 
       width: "15%",
       Cell: ({ value }) => value.toLocaleString(),
     },
@@ -264,6 +288,7 @@ function Incidents() {
                         onChange={(e) => setPriorityFilter(e.target.value)}
                       >
                         <MenuItem value="All">All Priorities</MenuItem>
+                        <MenuItem value="Critical">Critical</MenuItem>
                         <MenuItem value="High">High</MenuItem>
                         <MenuItem value="Medium">Medium</MenuItem>
                         <MenuItem value="Low">Low</MenuItem>
@@ -289,11 +314,15 @@ function Incidents() {
                   </Grid>
                 </Grid>
                 <DataTable
-                  table={{ columns, rows: filteredIncidents }}
+                  table={{ 
+                    columns, 
+                    rows: filteredIncidents 
+                  }}
                   isSorted={true}
                   entriesPerPage={true}
                   showTotalEntries={true}
                   noEndBorder
+                  canSearch={false}
                 />
               </MDBox>
             </Card>

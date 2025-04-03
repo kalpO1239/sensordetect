@@ -55,6 +55,9 @@ function Trending() {
     incidentsByLocation: {},
     incidentsBySeverity: {},
     incidentsByTime: [],
+    incidentsByTypeData: {},
+    incidentsBySeverityData: {},
+    incidentsTrendData: {},
   });
   const [loading, setLoading] = useState(true);
 
@@ -70,10 +73,13 @@ function Trending() {
           localStorage.getItem("fireIncidents") || "[]",
         );
 
+        console.log("Stored incidents for trending:", storedIncidents);
+
         const byType = {};
         const byLocation = {};
         const bySeverity = {};
         const byTime = [];
+        const byMonth = {};
 
         storedIncidents.forEach((incident) => {
           // Count by type
@@ -90,23 +96,83 @@ function Trending() {
 
           // Add to time series
           if (incident.createdAt) {
+            const date = new Date(incident.createdAt);
             byTime.push({
-              time: new Date(incident.createdAt),
+              time: date,
               type: type,
               severity: severity,
             });
+
+            // Group by month for charts
+            const monthKey = `${date.getFullYear()}-${date.getMonth() + 1}`;
+            if (!byMonth[monthKey]) {
+              byMonth[monthKey] = { 
+                LOW: 0, 
+                MEDIUM: 0, 
+                HIGH: 0, 
+                CRITICAL: 0,
+                total: 0
+              };
+            }
+            byMonth[monthKey][severity] = (byMonth[monthKey][severity] || 0) + 1;
+            byMonth[monthKey].total += 1;
           }
         });
+
+        // Transform data for charts
+        const incidentsByTypeData = {
+          labels: Object.keys(byType),
+          datasets: { label: "Incidents", data: Object.values(byType) },
+        };
+
+        const incidentsBySeverityData = {
+          labels: Object.keys(bySeverity),
+          datasets: { label: "Incidents", data: Object.values(bySeverity) },
+        };
+
+        // Create time series data for charts
+        const months = Object.keys(byMonth).sort();
+        const incidentsTrendData = {
+          labels: months.map((m) => {
+            const [year, month] = m.split("-");
+            return new Date(year, month - 1).toLocaleDateString(
+              "en-US", 
+              {
+                month: "short",
+                year: "numeric",
+              }
+            );
+          }),
+          datasets: [
+            {
+              label: "Critical",
+              data: months.map((m) => byMonth[m].CRITICAL || 0),
+            },
+            {
+              label: "High",
+              data: months.map((m) => byMonth[m].HIGH || 0),
+            },
+            {
+              label: "Medium",
+              data: months.map((m) => byMonth[m].MEDIUM || 0),
+            },
+            {
+              label: "Low",
+              data: months.map((m) => byMonth[m].LOW || 0),
+            },
+          ],
+        };
 
         setTrendingData({
           incidentsByType: byType,
           incidentsByLocation: byLocation,
           incidentsBySeverity: bySeverity,
           incidentsByTime: byTime.sort((a, b) => a.time - b.time),
+          incidentsByTypeData,
+          incidentsBySeverityData,
+          incidentsTrendData,
         });
 
-        // Update chart data based on the localStorage data
-        // This is where you would transform the data to match your chart formats
       } catch (error) {
         console.error("Error fetching trending data from localStorage:", error);
       } finally {
@@ -128,11 +194,6 @@ function Trending() {
       "Hotel",
     ],
     datasets: { label: "Incidents", data: [15, 20, 12, 25, 10, 18] },
-  };
-
-  const incidentsByTypeData = {
-    labels: ["Electrical", "Kitchen", "HVAC", "Chemical", "Trash", "Other"],
-    datasets: { label: "Incidents", data: [30, 25, 15, 10, 12, 8] },
   };
 
   const responseTimeData = {
@@ -178,6 +239,15 @@ function Trending() {
     { lat: 34.051235, lng: -118.244683, weight: 14 },
     { lat: 34.051235, lng: -118.242683, weight: 7 },
   ];
+
+  // Add this near the top of the file where other mock data is defined
+  const incidentsByTypeData = {
+    labels: ["Electrical", "Kitchen", "HVAC", "Chemical", "Other"],
+    datasets: {
+      label: "Incidents",
+      data: [15, 20, 12, 8, 5],
+    },
+  };
 
   return (
     <DashboardLayout>
@@ -255,9 +325,9 @@ function Trending() {
                         <ReportsBarChart
                           color="warning"
                           title="Incidents by Type"
-                          description="Number of fire incidents by type"
+                          description="Distribution of incidents by type"
                           date={`last updated: ${new Date().toLocaleDateString()}`}
-                          chart={incidentsByTypeData}
+                          chart={trendingData.incidentsByTypeData || incidentsByTypeData}
                         />
                       </MDBox>
                     </Grid>
@@ -289,8 +359,8 @@ function Trending() {
                                   component: "leaderboard",
                                 }}
                                 title="Incidents"
-                                description="Distribution by priority level"
-                                chart={incidentsByPriorityData}
+                                description="Distribution by severity level"
+                                chart={trendingData.incidentsBySeverityData || incidentsByPriorityData}
                               />
                             </MDBox>
                           </MDBox>
