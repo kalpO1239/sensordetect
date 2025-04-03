@@ -14,7 +14,7 @@ function HeatMap({
     // Load Google Maps API script if not already loaded
     if (!window.google) {
       const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDzzvMPAjNlioMG6Qc6WAoMcd5EGt-TDZA&libraries=visualization`;
       script.async = true;
       script.defer = true;
       script.onload = initMap;
